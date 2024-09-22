@@ -4,7 +4,17 @@ import { PaperProvider } from "react-native-paper";
 export default function RootLayout() {
   return (
     <PaperProvider>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#262222",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      >
         <Stack.Screen name="index" />
       </Stack>
     </PaperProvider>

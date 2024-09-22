@@ -4,7 +4,7 @@ import { Text } from "react-native";
 export const Chat = () => {
   return (
     <TabsProvider defaultIndex={0}>
-      <Tabs>
+      <Tabs mode="fixed" disableSwipe={true}>
         <TabScreen label="Conservative" icon="compass">
           <Text>Hello! I'm a Conservative</Text>
         </TabScreen>
