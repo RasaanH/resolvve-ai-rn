@@ -10,7 +10,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen. This is now in a safe area</Text>
+      <Text>
+        Edit app/index.tsx to edit this screen. This is now in a safe area
+      </Text>
     </SafeAreaView>
   );
 }
