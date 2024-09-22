@@ -1,5 +1,11 @@
 import { TabsProvider, Tabs, TabScreen } from "react-native-paper-tabs";
+import { router } from "expo-router";
+import { Button } from "react-native-paper";
 import { Text } from "react-native";
+
+const navigateToAbout = () => {
+  router.navigate("/about");
+};
 
 export const Chat = () => {
   return (
@@ -12,6 +18,7 @@ export const Chat = () => {
           <Text>Hello! I'm a Liberal</Text>
         </TabScreen>
       </Tabs>
+      <Button onPress={() => navigateToAbout()}>To About</Button>
     </TabsProvider>
   );
 };
