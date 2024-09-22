@@ -1,18 +1,16 @@
-import { Text } from "react-native";
+import { Chat } from "./chat";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>
-        Edit app/index.tsx to edit this screen. This is now in a safe area
-      </Text>
-    </SafeAreaView>
+    // <SafeAreaView
+    //   style={{
+    //     flex: 1,
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //   }}
+    // >
+    <Chat />
+    // {/* </SafeAreaView> */}
   );
 }
