@@ -1,4 +1,5 @@
 import { IMessage } from "react-native-gifted-chat";
+import "../assets/images/adaptive-icon.png";
 const regularUser = {
   _id: 224687234,
   name: "You",
@@ -6,7 +7,7 @@ const regularUser = {
 const systemUser = {
   _id: 916515277,
   name: "GPT",
-  avatar: "../assets/images/icon.png",
+  avatar: require("../assets/images/adaptive-icon.png"),
 };
 export const mockMessages: IMessage[] = [
   {

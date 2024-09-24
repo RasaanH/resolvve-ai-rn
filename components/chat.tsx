@@ -27,6 +27,7 @@ export const Chat = () => {
           <View style={{ backgroundColor: AppColors.DarkGrey, flex: 1 }}>
             <GiftedChat
               messages={messageList}
+              renderAvatarOnTop={true}
               onSend={(messages) => send(messages)}
               user={{
                 _id: 224687234,
