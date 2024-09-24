@@ -1,4 +1,1 @@
-export interface Message {
-  messageText: string;
-  userMessage: boolean;
-}
+// types go here
