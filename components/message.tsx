@@ -8,17 +8,11 @@ export const Message = ({ messageText, userMessage }: MessageType) => {
 const userStyles = StyleSheet.create({
   messageWrapper: {
     color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
   },
 });
 
 const systemStyles = StyleSheet.create({
   messageWrapper: {
     color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
   },
 });
