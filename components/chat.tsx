@@ -31,6 +31,7 @@ export const Chat = () => {
           <View style={{ backgroundColor: AppColors.DarkGrey, flex: 1 }}>
             <GiftedChat
               messages={messageList}
+              alignTop={true}
               renderAvatarOnTop={true}
               renderTime={() => null}
               renderBubble={(props) => {
