@@ -6,6 +6,7 @@ import { mockMessages } from "@/constants/MockData";
 import { useState } from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -20,14 +21,25 @@ export const Chat = () => {
   return (
     <TabsProvider defaultIndex={0}>
       <Tabs
-        theme={{ colors: { primary: AppColors.DarkNavy } }}
+        style={{
+          backgroundColor: AppColors.DarkGrey,
+        }}
+        tabLabelStyle={{
+          color: "white",
+        }}
+        theme={{
+          colors: {
+            primary: AppColors.DarkNavy,
+            onSurface: "white",
+          },
+        }}
         mode="fixed"
         disableSwipe={true}
       >
-        <TabScreen label="Conservative" icon="compass">
+        <TabScreen label="Conservative" icon="elephant">
           <View style={styles.backgroundForChat}></View>
         </TabScreen>
-        <TabScreen label="Liberal" icon="bag-suitcase">
+        <TabScreen label="Liberal" icon="donkey">
           <View style={{ backgroundColor: AppColors.DarkGrey, flex: 1 }}>
             <GiftedChat
               messages={messageList}
