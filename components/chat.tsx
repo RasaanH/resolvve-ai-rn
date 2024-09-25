@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { mockMessages } from "@/constants/MockData";
 import { useState } from "react";
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 
 const navigateToAbout = () => {
@@ -28,6 +28,33 @@ export const Chat = () => {
             <GiftedChat
               messages={messageList}
               renderAvatarOnTop={true}
+              renderTime={() => null}
+              renderBubble={(props) => {
+                return (
+                  <Bubble
+                    {...props}
+                    textStyle={{
+                      right: {
+                        // color: "#282424",
+                        color: "white",
+                      },
+                      left: {
+                        color: "white",
+                      },
+                    }}
+                    wrapperStyle={{
+                      left: {
+                        backgroundColor: "transparent",
+                        padding: 5,
+                      },
+                      right: {
+                        backgroundColor: "rgb(43 47 75)",
+                        padding: 5,
+                      },
+                    }}
+                  />
+                );
+              }}
               onSend={(messages) => send(messages)}
               user={{
                 _id: 224687234,
