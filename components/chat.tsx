@@ -19,7 +19,11 @@ export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
   return (
     <TabsProvider defaultIndex={0}>
-      <Tabs mode="fixed" disableSwipe={true}>
+      <Tabs
+        theme={{ colors: { primary: AppColors.DarkNavy } }}
+        mode="fixed"
+        disableSwipe={true}
+      >
         <TabScreen label="Conservative" icon="compass">
           <View style={styles.backgroundForChat}></View>
         </TabScreen>
@@ -35,7 +39,6 @@ export const Chat = () => {
                     {...props}
                     textStyle={{
                       right: {
-                        // color: "#282424",
                         color: "white",
                       },
                       left: {
@@ -48,7 +51,7 @@ export const Chat = () => {
                         padding: 5,
                       },
                       right: {
-                        backgroundColor: "rgb(43 47 75)",
+                        backgroundColor: AppColors.DarkNavy,
                         padding: 5,
                       },
                     }}
