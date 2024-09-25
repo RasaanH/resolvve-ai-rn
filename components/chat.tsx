@@ -40,10 +40,17 @@ export const Chat = () => {
           <View style={styles.backgroundForChat}></View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
-          <View style={{ backgroundColor: AppColors.DarkGrey, flex: 1 }}>
+          <View
+            style={{
+              backgroundColor: AppColors.DarkGrey,
+              flex: 1,
+              paddingTop: 15,
+            }}
+          >
             <GiftedChat
               messages={messageList}
               alignTop={true}
+              renderDay={() => null}
               renderAvatarOnTop={true}
               renderTime={() => null}
               renderBubble={(props) => {
