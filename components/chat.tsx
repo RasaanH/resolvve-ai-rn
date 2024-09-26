@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { mockMessages } from "@/constants/MockData";
 import { useState } from "react";
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -12,12 +12,17 @@ const navigateToAbout = () => {
   router.navigate("/about");
 };
 
-const send = (messages: any) => {
-  console.log({ messages });
-};
-
 export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
+  const send = (messages: IMessage[]) => {
+    console.log({ messages });
+    setMessageList([...messages, ...messageList]);
+    /**
+     * await response and block new messages
+     * When message comes back - render new message list
+     * Hanlde errors in catch
+     */
+  };
   return (
     <TabsProvider defaultIndex={0}>
       <Tabs
