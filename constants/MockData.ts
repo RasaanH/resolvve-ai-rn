@@ -4,7 +4,7 @@ const regularUser = {
   _id: 224687234,
   name: "You",
 };
-const systemUser = {
+export const systemUser = {
   _id: 916515277,
   name: "GPT",
   avatar: require("../assets/images/adaptive-icon.png"),

@@ -6,7 +6,7 @@ import { mockMessages } from "@/constants/MockData";
 import { useState } from "react";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
+import { mockChatCall } from "@/utility-functions/utils";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -14,14 +14,16 @@ const navigateToAbout = () => {
 
 export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
-  const send = (messages: IMessage[]) => {
-    console.log({ messages });
-    setMessageList([...messages, ...messageList]);
-    /**
-     * await response and block new messages
-     * When message comes back - render new message list
-     * Hanlde errors in catch
-     */
+  const send = async (messages: IMessage[]) => {
+    const newMessages = [...messages, ...messageList];
+    setMessageList([...newMessages]);
+    try {
+      const responseMessages = await mockChatCall([...newMessages]);
+      setMessageList([...responseMessages]);
+    } catch (err) {
+      console.log("something went wrong", err);
+      return [...newMessages];
+    }
   };
   return (
     <TabsProvider defaultIndex={0}>
