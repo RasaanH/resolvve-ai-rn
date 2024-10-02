@@ -25,8 +25,11 @@ export const Chat = () => {
       return [...newMessages];
     }
   };
+  const onTabChange = () => {
+    setMessageList([]);
+  };
   return (
-    <TabsProvider defaultIndex={0}>
+    <TabsProvider defaultIndex={0} onChangeIndex={onTabChange}>
       <Tabs
         style={{
           backgroundColor: AppColors.DarkGrey,
@@ -44,16 +47,47 @@ export const Chat = () => {
         disableSwipe={true}
       >
         <TabScreen label="Conservative" icon="elephant">
-          <View style={styles.backgroundForChat}></View>
+          <View style={styles.backgroundForChat}>
+            <GiftedChat
+              messages={messageList}
+              alignTop={true}
+              renderDay={() => null}
+              renderAvatarOnTop={true}
+              renderTime={() => null}
+              renderBubble={(props) => {
+                return (
+                  <Bubble
+                    {...props}
+                    textStyle={{
+                      right: {
+                        color: "white",
+                      },
+                      left: {
+                        color: "white",
+                      },
+                    }}
+                    wrapperStyle={{
+                      left: {
+                        backgroundColor: "transparent",
+                        padding: 5,
+                      },
+                      right: {
+                        backgroundColor: AppColors.DarkNavy,
+                        padding: 5,
+                      },
+                    }}
+                  />
+                );
+              }}
+              onSend={(messages) => send(messages)}
+              user={{
+                _id: 224687234,
+              }}
+            />
+          </View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
-          <View
-            style={{
-              backgroundColor: AppColors.DarkGrey,
-              flex: 1,
-              paddingTop: 15,
-            }}
-          >
+          <View style={styles.backgroundForChat}>
             <GiftedChat
               messages={messageList}
               alignTop={true}
@@ -106,7 +140,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   backgroundForChat: {
-    // backgroundColor: "#1D3D47",
-    backgroundColor: "blue",
+    backgroundColor: AppColors.DarkGrey,
+    flex: 1,
+    paddingTop: 15,
   },
 });
