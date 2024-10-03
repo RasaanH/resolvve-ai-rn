@@ -16,6 +16,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen options={{ headerTitle: "About" }} name="about" />
+        <Stack.Screen options={{ headerTitle: "Sign Up" }} name="signup" />
         <Stack.Screen
           options={{
             headerTitle: "BalanceGPT",
