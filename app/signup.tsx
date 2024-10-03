@@ -2,6 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
