@@ -5,10 +5,21 @@ import { AppColors } from "@/constants/Colors";
 import { firebaseApp } from "./index";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Button } from "react-native-paper";
+import { validateSignUp } from "@/utility-functions/utils";
+import { Text } from "react-native-paper";
+import { SignUpValidationObj } from "@/constants/Types";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const defaultErrorMessage = {
+    password: null,
+    email: null,
+    confirmPassword: null,
+  };
+  const [errorMessage, setErrorMessage] =
+    useState<SignUpValidationObj>(defaultErrorMessage);
   const [confirmPassword, setConfirmPassword] = useState("");
   const auth = getAuth(firebaseApp);
   const createEmailUser = () => {
@@ -26,30 +37,108 @@ export default function SignUp() {
         });
       });
   };
+
+  const passwordsMatch = (password1: string, password2: string) =>
+    password1 === password2;
+
+  const handleEmailChange = (value: string) => {
+    const samePasswords = passwordsMatch(password, confirmPassword);
+    setEmail(value);
+    if (value && confirmPassword && password && samePasswords) {
+      setIsValid(true);
+      setErrorMessage(defaultErrorMessage);
+      return;
+    }
+    setIsValid(false);
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    const samePasswords = passwordsMatch(value, confirmPassword);
+    console.log({ value, confirmPassword });
+
+    if (email && confirmPassword && value && samePasswords) {
+      setIsValid(true);
+      setErrorMessage(defaultErrorMessage);
+      return;
+    }
+    setIsValid(false);
+  };
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+    const samePasswords = passwordsMatch(value, password);
+
+    if (email && value && password && samePasswords) {
+      setIsValid(true);
+      setErrorMessage(defaultErrorMessage);
+      return;
+    }
+    setIsValid(false);
+    setErrorMessage((prevState) => {
+      return { ...prevState, confirmPassword: "Passwords do not match" };
+    });
+  };
+
+  const handleSubmit = () => {
+    const responseObj = validateSignUp({ password, confirmPassword, email });
+    const validForm = Object.values(responseObj).every(
+      (value) => value === null
+    );
+    if (validForm) {
+      // Perform the submission or next step
+      setErrorMessage(defaultErrorMessage);
+      console.log("Password is valid and form is submitted");
+    } else {
+      console.log("error response object", responseObj);
+      setErrorMessage(responseObj);
+    }
+  };
+  const firstErrorMessage = Object.values(errorMessage).find(
+    (value) => value !== null
+  );
   return (
     <View style={styles.background}>
       <TextInput
         label="Email"
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={handleEmailChange}
+        style={[
+          styles.input,
+          !!errorMessage?.email ? styles.invalidInput : null,
+        ]}
       />
       <TextInput
+        style={[
+          styles.input,
+          !!errorMessage?.password ? styles.invalidInput : null,
+        ]}
         label="Password"
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={handlePasswordChange}
         secureTextEntry={true}
       />
       <TextInput
         label="Confirm Password"
         value={confirmPassword}
-        onChangeText={(text) => setConfirmPassword(text)}
+        style={[
+          styles.input,
+          !!errorMessage?.confirmPassword ? styles.invalidInput : null,
+        ]}
+        onChangeText={handleConfirmPasswordChange}
         secureTextEntry={true}
       />
+      <View>
+        {errorMessage ? (
+          <Text style={styles.error}>{firstErrorMessage}</Text>
+        ) : null}
+      </View>
       <View>
         <Button
           icon="account-plus-outline"
           mode="elevated"
-          onPress={() => console.log("Pressed")}
+          onPress={handleSubmit}
+          disabled={!isValid}
         >
           Continue
         </Button>
@@ -73,5 +162,19 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: AppColors.DarkGrey,
     flex: 1,
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  invalidInput: {
+    borderColor: "red",
   },
 });
