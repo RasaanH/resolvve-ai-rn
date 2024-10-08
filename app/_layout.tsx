@@ -18,8 +18,6 @@ export default function RootLayout() {
           },
         }}
       >
-        <Stack.Screen options={{ headerTitle: "About" }} name="about" />
-        <Stack.Screen options={{ headerTitle: "Sign Up" }} name="signup" />
         <Stack.Screen
           options={{
             headerTitle: "BalanceGPT",
@@ -29,6 +27,8 @@ export default function RootLayout() {
           }}
           name="index"
         />
+        <Stack.Screen options={{ headerTitle: "About" }} name="about" />
+        <Stack.Screen options={{ headerTitle: "Sign Up" }} name="signup" />
       </Stack>
     </PaperProvider>
   );
