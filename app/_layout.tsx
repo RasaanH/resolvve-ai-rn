@@ -1,11 +1,14 @@
 import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
+import { CustomNavigationBar } from "@/components/CustomNavigationBar";
 
 export default function RootLayout() {
   return (
     <PaperProvider>
       <Stack
+        initialRouteName="/"
         screenOptions={{
+          header: (props: any) => <CustomNavigationBar {...props} />,
           headerStyle: {
             backgroundColor: "#262222",
           },

@@ -10,6 +10,6 @@ export const firebaseApp = initializeApp({
   appId: "1:1014320675783:web:32d315c275550ad32f77e2",
 });
 
-export default function Index() {
+export default function Index({ navigation }: any) {
   return <Chat />;
 }
