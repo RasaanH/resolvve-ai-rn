@@ -1,10 +1,9 @@
 import { View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { TextInput } from "react-native-paper";
+import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
 import { firebaseApp } from "./index";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Button } from "react-native-paper";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
@@ -13,6 +12,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [snackBarVisible, setSnackBarVisible] = useState(false);
   const defaultErrorMessage = {
     password: null,
     email: null,
@@ -22,11 +22,20 @@ export default function SignUp() {
     useState<SignUpValidationObj>(defaultErrorMessage);
   const [confirmPassword, setConfirmPassword] = useState("");
   const auth = getAuth(firebaseApp);
+
+  const showSnackbar = () => {
+    setSnackBarVisible(true);
+    setTimeout(() => {
+      setSnackBarVisible(false);
+    }, 2000);
+  };
+
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("user credential", userCredential);
         const user = userCredential.user;
+        showSnackbar();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -89,6 +98,7 @@ export default function SignUp() {
       // Perform the submission or next step
       setErrorMessage(defaultErrorMessage);
       console.log("Password is valid and form is submitted");
+      createEmailUser();
     } else {
       console.log("error response object", responseObj);
       setErrorMessage(responseObj);
@@ -109,6 +119,7 @@ export default function SignUp() {
         label="Email"
         value={email}
         onChangeText={handleEmailChange}
+        onSubmitEditing={handleSubmit}
         style={[
           styles.input,
           !!errorMessage?.email ? styles.invalidInput : null,
@@ -121,6 +132,7 @@ export default function SignUp() {
         ]}
         label="Password"
         value={password}
+        onSubmitEditing={handleSubmit}
         onChangeText={handlePasswordChange}
         secureTextEntry={true}
       />
@@ -132,6 +144,7 @@ export default function SignUp() {
           !!errorMessage?.confirmPassword ? styles.invalidInput : null,
         ]}
         onChangeText={handleConfirmPasswordChange}
+        onSubmitEditing={handleSubmit}
         secureTextEntry={true}
       />
       <View>
@@ -154,6 +167,18 @@ export default function SignUp() {
           Login
         </Button>
       </View>
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={() => {}}
+        action={{
+          label: "close",
+          onPress: () => {
+            setSnackBarVisible(false);
+          },
+        }}
+      >
+        You've succesfully signed up!
+      </Snackbar>
     </View>
   );
 }
