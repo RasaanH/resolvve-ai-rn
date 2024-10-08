@@ -2,8 +2,8 @@ import { View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
-import { firebaseApp } from "./index";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { firebaseApp } from ".";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
@@ -22,7 +22,6 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] =
     useState<SignUpValidationObj>(defaultErrorMessage);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const auth = getAuth(firebaseApp);
 
   const showSnackbar = () => {
     setSnackBarVisible(true);
@@ -37,6 +36,8 @@ export default function SignUp() {
       setErrorSnackbarVisible(false);
     }, 4000);
   };
+
+  const auth = getAuth(firebaseApp);
 
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -54,9 +55,6 @@ export default function SignUp() {
         showErrorSnackbar();
       });
   };
-
-  const passwordsMatch = (password1: string, password2: string) =>
-    password1 === password2;
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
