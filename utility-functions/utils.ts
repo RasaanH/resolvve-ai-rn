@@ -33,10 +33,10 @@ export const validateSignUp = ({
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const isValidEmail = (email: string) => emailRegex.test(email);
   if (password.length < 8) {
-    responseObj.password = "Password must be at least 8 characters long.";
+    responseObj.password = "Password must be at least 8 characters long";
   }
   if (password !== confirmPassword) {
-    responseObj.confirmPassword = "Passwords do not match.";
+    responseObj.confirmPassword = "Passwords do not match";
   }
   if (!isValidEmail(email)) {
     responseObj.email = "invlaid email address";

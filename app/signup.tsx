@@ -94,9 +94,15 @@ export default function SignUp() {
       setErrorMessage(responseObj);
     }
   };
-  const firstErrorMessage = Object.values(errorMessage).find(
-    (value) => value !== null
-  );
+  const errorString = Object.values(errorMessage).reduce((message, value) => {
+    if (!value) {
+      return message;
+    }
+    if (!message) {
+      return value;
+    }
+    return `${message}, ${value}`;
+  });
   return (
     <View style={styles.background}>
       <TextInput
@@ -129,9 +135,7 @@ export default function SignUp() {
         secureTextEntry={true}
       />
       <View>
-        {errorMessage ? (
-          <Text style={styles.error}>{firstErrorMessage}</Text>
-        ) : null}
+        {errorMessage ? <Text style={styles.error}>{errorString}</Text> : null}
       </View>
       <View>
         <Button
