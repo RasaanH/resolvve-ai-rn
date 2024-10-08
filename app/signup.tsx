@@ -13,6 +13,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [snackBarVisible, setSnackBarVisible] = useState(false);
+  const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
   const defaultErrorMessage = {
     password: null,
     email: null,
@@ -30,10 +31,16 @@ export default function SignUp() {
     }, 2000);
   };
 
+  const showErrorSnackbar = () => {
+    setErrorSnackbarVisible(true);
+    setTimeout(() => {
+      setErrorSnackbarVisible(false);
+    }, 4000);
+  };
+
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log("user credential", userCredential);
         const user = userCredential.user;
         showSnackbar();
       })
@@ -44,6 +51,7 @@ export default function SignUp() {
           errorCode,
           errorMessage,
         });
+        showErrorSnackbar();
       });
   };
 
@@ -51,9 +59,8 @@ export default function SignUp() {
     password1 === password2;
 
   const handleEmailChange = (value: string) => {
-    const samePasswords = passwordsMatch(password, confirmPassword);
     setEmail(value);
-    if (value && confirmPassword && password && samePasswords) {
+    if (value && confirmPassword && password) {
       setIsValid(true);
       setErrorMessage(defaultErrorMessage);
       return;
@@ -63,10 +70,8 @@ export default function SignUp() {
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    const samePasswords = passwordsMatch(value, confirmPassword);
-    console.log({ value, confirmPassword });
 
-    if (email && confirmPassword && value && samePasswords) {
+    if (email && confirmPassword && value) {
       setIsValid(true);
       setErrorMessage(defaultErrorMessage);
       return;
@@ -76,17 +81,12 @@ export default function SignUp() {
 
   const handleConfirmPasswordChange = (value: string) => {
     setConfirmPassword(value);
-    const samePasswords = passwordsMatch(value, password);
-
-    if (email && value && password && samePasswords) {
+    if (email && value && password) {
       setIsValid(true);
       setErrorMessage(defaultErrorMessage);
       return;
     }
     setIsValid(false);
-    setErrorMessage((prevState) => {
-      return { ...prevState, confirmPassword: "Passwords do not match" };
-    });
   };
 
   const handleSubmit = () => {
@@ -95,12 +95,9 @@ export default function SignUp() {
       (value) => value === null
     );
     if (validForm) {
-      // Perform the submission or next step
       setErrorMessage(defaultErrorMessage);
-      console.log("Password is valid and form is submitted");
       createEmailUser();
     } else {
-      console.log("error response object", responseObj);
       setErrorMessage(responseObj);
     }
   };
@@ -178,6 +175,18 @@ export default function SignUp() {
         }}
       >
         You've succesfully signed up!
+      </Snackbar>
+      <Snackbar
+        visible={errorSnackbarVisible}
+        onDismiss={() => {}}
+        action={{
+          label: "close",
+          onPress: () => {
+            setErrorSnackbarVisible(false);
+          },
+        }}
+      >
+        Error Signing Up
       </Snackbar>
     </View>
   );
