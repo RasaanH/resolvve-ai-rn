@@ -1,35 +1,61 @@
-import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
-import { CustomNavigationBar } from "@/components/CustomNavigationBar";
+import { Drawer } from "expo-router/drawer";
+import { DrawerToggleButton } from "@react-navigation/drawer";
+import { router } from "expo-router";
+import { IconButton } from "react-native-paper";
 
 export default function RootLayout() {
   return (
     <PaperProvider>
-      <Stack
-        initialRouteName="/"
+      <Drawer
         screenOptions={{
-          header: (props: any) => <CustomNavigationBar {...props} />,
-          headerStyle: {
-            backgroundColor: "#262222",
+          drawerStyle: {
+            width: "20%",
           },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
+          headerShown: true,
         }}
       >
-        <Stack.Screen
-          options={{
-            headerTitle: "BalanceGPT",
-            headerTitleStyle: {
-              color: "white",
-            },
-          }}
+        <Drawer.Screen
           name="index"
+          options={{
+            drawerLabel: "Balance GPT",
+            title: "BalanceGPT",
+            headerLeft: () => <DrawerToggleButton />,
+            swipeEdgeWidth: 0,
+            drawerItemStyle: { display: "none" },
+          }}
         />
-        <Stack.Screen options={{ headerTitle: "About" }} name="about" />
-        <Stack.Screen options={{ headerTitle: "Sign Up" }} name="signup" />
-      </Stack>
+        <Drawer.Screen
+          name="about"
+          options={{
+            drawerLabel: "About",
+            title: "About",
+            headerLeft: () => (
+              <IconButton
+                icon="keyboard-backspace"
+                size={25}
+                iconColor="black"
+                onPress={() => router.navigate("/")}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="signup"
+          options={{
+            drawerLabel: "Sign Up",
+            title: "Sign Up",
+            headerLeft: () => (
+              <IconButton
+                icon="keyboard-backspace"
+                size={25}
+                iconColor="black"
+                onPress={() => router.navigate("/")}
+              />
+            ),
+          }}
+        />
+      </Drawer>
     </PaperProvider>
   );
 }
