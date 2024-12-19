@@ -6,6 +6,7 @@ import { mockMessages } from "@/constants/MockData";
 import { useState } from "react";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
+import { Spaces } from "@/constants/Spacing";
 import { mockChatCall } from "@/utility-functions/utils";
 
 const navigateToAbout = () => {
@@ -33,13 +34,15 @@ export const Chat = () => {
       <Tabs
         style={{
           backgroundColor: AppColors.DarkGrey,
+          borderBottomColor: AppColors.White,
+          borderBottomWidth: Spaces.Xxs,
         }}
         tabLabelStyle={{
           color: "white",
         }}
         theme={{
           colors: {
-            primary: AppColors.DarkNavy,
+            primary: AppColors.DarkGrey,
             onSurface: "white",
           },
         }}
