@@ -15,6 +15,7 @@ const navigateToAbout = () => {
 
 export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
+  const [tabIndex, setTabIndex] = useState(0);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export const Chat = () => {
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
     setMessageList([...newMessages]);
+    Keyboard.dismiss();
     try {
       const responseMessages = await mockChatCall([...newMessages]);
       setMessageList([...responseMessages]);
@@ -49,11 +51,12 @@ export const Chat = () => {
       return [...newMessages];
     }
   };
-  const onTabChange = () => {
+  const onTabChange = (index: number) => {
     setMessageList([]);
+    setTabIndex(index);
   };
   return (
-    <TabsProvider defaultIndex={0} onChangeIndex={onTabChange}>
+    <TabsProvider defaultIndex={tabIndex} onChangeIndex={onTabChange}>
       <Tabs
         style={{
           backgroundColor: AppColors.DarkGrey,
@@ -74,96 +77,100 @@ export const Chat = () => {
       >
         <TabScreen label="Conservative" icon="elephant">
           <View style={styles.backgroundForChat}>
-            <GiftedChat
-              messages={messageList}
-              alignTop={true}
-              renderDay={() => null}
-              renderAvatarOnTop={true}
-              renderTime={() => null}
-              listViewProps={{
-                contentContainerStyle: {
-                  flexGrow: 1,
-                  justifyContent: "flex-start",
-                  paddingBottom: keyboardHeight,
-                },
-              }}
-              renderBubble={(props) => {
-                return (
-                  <Bubble
-                    {...props}
-                    textStyle={{
-                      right: {
-                        color: "white",
-                      },
-                      left: {
-                        color: "white",
-                      },
-                    }}
-                    wrapperStyle={{
-                      left: {
-                        backgroundColor: "transparent",
-                        padding: 5,
-                      },
-                      right: {
-                        backgroundColor: AppColors.DarkNavy,
-                        padding: 5,
-                      },
-                    }}
-                  />
-                );
-              }}
-              onSend={(messages) => send(messages)}
-              user={{
-                _id: 224687234,
-              }}
-            />
+            {tabIndex === 0 && (
+              <GiftedChat
+                messages={messageList}
+                alignTop={true}
+                renderDay={() => null}
+                renderAvatarOnTop={true}
+                renderTime={() => null}
+                listViewProps={{
+                  contentContainerStyle: {
+                    flexGrow: 1,
+                    justifyContent: "flex-start",
+                    paddingBottom: keyboardHeight,
+                  },
+                }}
+                renderBubble={(props) => {
+                  return (
+                    <Bubble
+                      {...props}
+                      textStyle={{
+                        right: {
+                          color: "white",
+                        },
+                        left: {
+                          color: "white",
+                        },
+                      }}
+                      wrapperStyle={{
+                        left: {
+                          backgroundColor: "transparent",
+                          padding: 5,
+                        },
+                        right: {
+                          backgroundColor: AppColors.DarkNavy,
+                          padding: 5,
+                        },
+                      }}
+                    />
+                  );
+                }}
+                onSend={(messages) => send(messages)}
+                user={{
+                  _id: 224687234,
+                }}
+              />
+            )}
           </View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
           <View style={styles.backgroundForChat}>
-            <GiftedChat
-              messages={messageList}
-              alignTop={true}
-              renderDay={() => null}
-              renderAvatarOnTop={true}
-              renderTime={() => null}
-              listViewProps={{
-                contentContainerStyle: {
-                  flexGrow: 1,
-                  justifyContent: "flex-start",
-                  paddingBottom: keyboardHeight,
-                },
-              }}
-              renderBubble={(props) => {
-                return (
-                  <Bubble
-                    {...props}
-                    textStyle={{
-                      right: {
-                        color: "white",
-                      },
-                      left: {
-                        color: "white",
-                      },
-                    }}
-                    wrapperStyle={{
-                      left: {
-                        backgroundColor: "transparent",
-                        padding: 5,
-                      },
-                      right: {
-                        backgroundColor: AppColors.DarkNavy,
-                        padding: 5,
-                      },
-                    }}
-                  />
-                );
-              }}
-              onSend={(messages) => send(messages)}
-              user={{
-                _id: 224687234,
-              }}
-            />
+            {tabIndex === 1 && (
+              <GiftedChat
+                messages={messageList}
+                alignTop={true}
+                renderDay={() => null}
+                renderAvatarOnTop={true}
+                renderTime={() => null}
+                listViewProps={{
+                  contentContainerStyle: {
+                    flexGrow: 1,
+                    justifyContent: "flex-start",
+                    paddingBottom: keyboardHeight,
+                  },
+                }}
+                renderBubble={(props) => {
+                  return (
+                    <Bubble
+                      {...props}
+                      textStyle={{
+                        right: {
+                          color: "white",
+                        },
+                        left: {
+                          color: "white",
+                        },
+                      }}
+                      wrapperStyle={{
+                        left: {
+                          backgroundColor: "transparent",
+                          padding: 5,
+                        },
+                        right: {
+                          backgroundColor: AppColors.DarkNavy,
+                          padding: 5,
+                        },
+                      }}
+                    />
+                  );
+                }}
+                onSend={(messages) => send(messages)}
+                user={{
+                  _id: 224687234,
+                }}
+              />
+            )}
           </View>
         </TabScreen>
       </Tabs>
