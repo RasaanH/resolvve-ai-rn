@@ -1,9 +1,9 @@
 import { TabsProvider, Tabs, TabScreen } from "react-native-paper-tabs";
 import { router } from "expo-router";
 import { Button } from "react-native-paper";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Keyboard } from "react-native";
 import { mockMessages } from "@/constants/MockData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
@@ -15,6 +15,29 @@ const navigateToAbout = () => {
 
 export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
     setMessageList([...newMessages]);
@@ -97,6 +120,13 @@ export const Chat = () => {
               renderDay={() => null}
               renderAvatarOnTop={true}
               renderTime={() => null}
+              listViewProps={{
+                contentContainerStyle: {
+                  flexGrow: 1,
+                  justifyContent: "flex-start",
+                  paddingBottom: keyboardHeight,
+                },
+              }}
               renderBubble={(props) => {
                 return (
                   <Bubble
