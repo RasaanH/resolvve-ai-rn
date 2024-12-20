@@ -80,6 +80,13 @@ export const Chat = () => {
               renderDay={() => null}
               renderAvatarOnTop={true}
               renderTime={() => null}
+              listViewProps={{
+                contentContainerStyle: {
+                  flexGrow: 1,
+                  justifyContent: "flex-start",
+                  paddingBottom: keyboardHeight,
+                },
+              }}
               renderBubble={(props) => {
                 return (
                   <Bubble
