@@ -9,7 +9,7 @@ interface PromptBubbleProps {
 }
 export const PromptBubble = ({ text, onClick }: PromptBubbleProps) => (
   <Button
-    mode="elevated"
+    mode="outlined"
     textColor={AppColors.Black}
     style={styles.buttonContainer}
     labelStyle={styles.buttonLabel}
@@ -22,17 +22,15 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end",
-    borderWidth: 3,
+    justifyContent: "center",
     borderRadius: 100,
-    backgroundColor: AppColors.White,
     margin: Spaces.S,
-    color: AppColors.Black,
+    color: AppColors.White,
     padding: 0,
   },
   buttonLabel: {
     padding: 0,
-    marginVertical: Spaces.S,
-    marginHorizontal: Spaces.L,
+    color: AppColors.White,
+    width: "100%",
   },
 });

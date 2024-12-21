@@ -4,6 +4,7 @@ import { Spaces } from "@/constants/Spacing";
 import { SendFn } from "./ChatBody";
 import { conservativePrompts, liberalPrompts } from "./ChatConstants";
 import { PromptBubble } from "./PromptBubble";
+import { Text } from "react-native-paper";
 
 export enum ChatModes {
   liberal = "liberal",
@@ -25,15 +26,36 @@ export const EmptyChat = ({
     <PromptBubble key={prompt} text={prompt} onClick={send} />
   ));
 
-  return <View style={styles.textContainer}>{promptBubbles}</View>;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Let's Talk</Text>
+      <View style={styles.promptBublesContainer}>{promptBubbles}</View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  textContainer: {
+  promptBublesContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
     paddingTop: Spaces.XL,
     transform: [{ scaleY: -1 }],
+    marginHorizontal: 20,
+  },
+  text: {
+    color: AppColors.White,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    transform: [{ scaleY: -1 }],
+    textAlign: "center",
+    fontSize: 30,
+  },
+  container: {
+    flex: 1,
+    flexDirection: "column-reverse",
+    justifyContent: "center",
+    paddingBottom: 40,
   },
 });
