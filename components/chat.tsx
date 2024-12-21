@@ -8,6 +8,7 @@ import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
 import { mockChatCall } from "@/utility-functions/utils";
+import { ChatBody } from "./ChatWrapper/ChatBody";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -16,28 +17,6 @@ const navigateToAbout = () => {
 export const Chat = () => {
   const [messageList, setMessageList] = useState(mockMessages);
   const [tabIndex, setTabIndex] = useState(0);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      (event) => {
-        setKeyboardHeight(event.endCoordinates.height);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
@@ -48,7 +27,6 @@ export const Chat = () => {
       setMessageList([...responseMessages]);
     } catch (err) {
       console.log("something went wrong", err);
-      return [...newMessages];
     }
   };
   const onTabChange = (index: number) => {
@@ -80,100 +58,14 @@ export const Chat = () => {
         <TabScreen label="Conservative" icon="elephant">
           <View style={styles.backgroundForChat}>
             {tabIndex === 0 && (
-              <GiftedChat
-                messages={messageList}
-                placeholder="Message"
-                alignTop={true}
-                renderDay={() => null}
-                renderAvatarOnTop={true}
-                renderTime={() => null}
-                listViewProps={{
-                  contentContainerStyle: {
-                    flexGrow: 1,
-                    justifyContent: "flex-start",
-                    paddingBottom: keyboardHeight,
-                  },
-                }}
-                renderBubble={(props) => {
-                  return (
-                    <Bubble
-                      {...props}
-                      textStyle={{
-                        right: {
-                          color: "white",
-                        },
-                        left: {
-                          color: "white",
-                        },
-                      }}
-                      wrapperStyle={{
-                        left: {
-                          backgroundColor: "transparent",
-                          padding: 5,
-                        },
-                        right: {
-                          backgroundColor: AppColors.DarkNavy,
-                          padding: 5,
-                        },
-                      }}
-                    />
-                  );
-                }}
-                onSend={(messages) => send(messages)}
-                user={{
-                  _id: 224687234,
-                }}
-              />
+              <ChatBody messageList={messageList} send={send} />
             )}
           </View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
           <View style={styles.backgroundForChat}>
             {tabIndex === 1 && (
-              <GiftedChat
-                messages={messageList}
-                placeholder="Message"
-                alignTop={true}
-                renderDay={() => null}
-                renderAvatarOnTop={true}
-                renderTime={() => null}
-                listViewProps={{
-                  contentContainerStyle: {
-                    flexGrow: 1,
-                    justifyContent: "flex-start",
-                    paddingBottom: keyboardHeight,
-                  },
-                }}
-                renderBubble={(props) => {
-                  return (
-                    <Bubble
-                      {...props}
-                      textStyle={{
-                        right: {
-                          color: "white",
-                        },
-                        left: {
-                          color: "white",
-                        },
-                      }}
-                      wrapperStyle={{
-                        left: {
-                          backgroundColor: "transparent",
-                          padding: 5,
-                        },
-                        right: {
-                          backgroundColor: AppColors.DarkNavy,
-                          padding: 5,
-                        },
-                      }}
-                    />
-                  );
-                }}
-                onSend={(messages) => send(messages)}
-                user={{
-                  _id: 224687234,
-                }}
-              />
+              <ChatBody messageList={messageList} send={send} />
             )}
           </View>
         </TabScreen>
