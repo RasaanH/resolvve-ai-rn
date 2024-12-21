@@ -52,7 +52,9 @@ export const Chat = () => {
     }
   };
   const onTabChange = (index: number) => {
-    setMessageList([]);
+    if (messageList !== mockMessages) {
+      setMessageList([]);
+    }
     setTabIndex(index);
   };
   return (
@@ -80,6 +82,7 @@ export const Chat = () => {
             {tabIndex === 0 && (
               <GiftedChat
                 messages={messageList}
+                placeholder="Message"
                 alignTop={true}
                 renderDay={() => null}
                 renderAvatarOnTop={true}
@@ -129,6 +132,7 @@ export const Chat = () => {
             {tabIndex === 1 && (
               <GiftedChat
                 messages={messageList}
+                placeholder="Message"
                 alignTop={true}
                 renderDay={() => null}
                 renderAvatarOnTop={true}
