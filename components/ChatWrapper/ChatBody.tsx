@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
-import { EmptyChat } from "./EmptyChat";
+import { ChatModes, EmptyChat } from "./EmptyChat";
 
-type SendFn = (messages: IMessage[]) => Promise<void>;
+export type SendFn = (messages: IMessage[]) => Promise<void>;
 
 interface ChatBodyProps {
   messageList: IMessage[];
   send: SendFn;
+  mode: ChatModes;
 }
 
-export const ChatBody = ({ messageList, send }: ChatBodyProps) => {
+export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -35,15 +36,14 @@ export const ChatBody = ({ messageList, send }: ChatBodyProps) => {
     };
   }, []);
 
-  if (messageList.length === 0) {
-    return <EmptyChat />;
-  }
   return (
     <GiftedChat
       messages={messageList}
       placeholder="Message"
       alignTop={true}
       renderDay={() => null}
+      renderChatEmpty={() => <EmptyChat send={send} mode={mode} />}
+      inverted={messageList.length !== 0}
       renderAvatarOnTop={true}
       renderTime={() => null}
       listViewProps={{

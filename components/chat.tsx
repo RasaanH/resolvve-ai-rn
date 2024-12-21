@@ -9,6 +9,7 @@ import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
 import { mockChatCall } from "@/utility-functions/utils";
 import { ChatBody } from "./ChatWrapper/ChatBody";
+import { ChatModes } from "./ChatWrapper/EmptyChat";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -35,6 +36,9 @@ export const Chat = () => {
     }
     setTabIndex(index);
   };
+
+  const mode = tabIndex === 0 ? ChatModes.conservative : ChatModes.liberal;
+
   return (
     <TabsProvider defaultIndex={tabIndex} onChangeIndex={onTabChange}>
       <Tabs
@@ -58,14 +62,14 @@ export const Chat = () => {
         <TabScreen label="Conservative" icon="elephant">
           <View style={styles.backgroundForChat}>
             {tabIndex === 0 && (
-              <ChatBody messageList={messageList} send={send} />
+              <ChatBody messageList={messageList} send={send} mode={mode} />
             )}
           </View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
           <View style={styles.backgroundForChat}>
             {tabIndex === 1 && (
-              <ChatBody messageList={messageList} send={send} />
+              <ChatBody messageList={messageList} send={send} mode={mode} />
             )}
           </View>
         </TabScreen>

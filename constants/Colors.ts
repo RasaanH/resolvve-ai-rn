@@ -29,4 +29,7 @@ export enum AppColors {
   DarkGrey = "#262222",
   DarkNavy = "rgb(43 47 75)",
   White = "#fff",
+  Black = "#000",
+  ConservativeRed = "#E81B23",
+  LiberalBlue = "#0055A4",
 }
