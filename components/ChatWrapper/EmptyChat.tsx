@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     transform: [{ scaleY: -1 }],
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 27,
   },
   container: {
     flex: 1,

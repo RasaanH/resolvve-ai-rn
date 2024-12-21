@@ -6,6 +6,6 @@ export const conservativePrompts: string[] = [
 
 export const liberalPrompts: string[] = [
   "Why did Trump Win?",
-  "How can we address climate change?",
-  "How can we fix Roe V Wade?",
+  "What's next for climate change?",
+  "Can we fix Roe V Wade?",
 ];

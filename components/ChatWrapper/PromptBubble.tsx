@@ -32,5 +32,6 @@ const styles = StyleSheet.create({
     padding: 0,
     color: AppColors.White,
     width: "100%",
+    fontSize: 16,
   },
 });
