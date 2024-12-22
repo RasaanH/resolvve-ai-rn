@@ -3,6 +3,8 @@ import { Keyboard } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
+import { InputToolbar } from "react-native-gifted-chat";
+import { Spaces } from "@/constants/Spacing";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -11,6 +13,22 @@ interface ChatBodyProps {
   send: SendFn;
   mode: ChatModes;
 }
+
+const customtInputToolbar = (props: any) => {
+  return (
+    <InputToolbar
+      {...props}
+      containerStyle={{
+        backgroundColor: "white",
+        borderTopColor: "#E8E8E8",
+        borderTopWidth: 1,
+        padding: Spaces.S,
+        borderRadius: 8,
+        marginHorizontal: Spaces.M,
+      }}
+    />
+  );
+};
 
 export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -45,6 +63,7 @@ export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
       renderChatEmpty={() => (
         <EmptyChat keyboardHeight={keyboardHeight} send={send} mode={mode} />
       )}
+      renderInputToolbar={(props) => customtInputToolbar(props)}
       inverted={messageList.length !== 0}
       renderAvatarOnTop={true}
       renderTime={() => null}

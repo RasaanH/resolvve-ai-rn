@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
   backgroundForChat: {
     backgroundColor: AppColors.DarkGrey,
     flex: 1,
-    paddingTop: 15,
+    paddingVertical: 15,
   },
 });
