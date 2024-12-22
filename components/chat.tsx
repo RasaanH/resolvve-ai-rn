@@ -2,9 +2,9 @@ import { TabsProvider, Tabs, TabScreen } from "react-native-paper-tabs";
 import { router } from "expo-router";
 import { Button } from "react-native-paper";
 import { View, StyleSheet, Keyboard } from "react-native";
-import { mockMessages, defaultMessage } from "@/constants/MockData";
-import { useState, useEffect } from "react";
-import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
+import { defaultMessage } from "@/constants/MockData";
+import { useState } from "react";
+import { IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
 import { mockChatCall } from "@/utility-functions/utils";
@@ -43,11 +43,16 @@ export const Chat = () => {
       <Tabs
         style={{
           backgroundColor: AppColors.DarkGrey,
-          borderBottomColor: AppColors.White,
-          borderBottomWidth: Spaces.Xxs,
+          marginVertical: Spaces.S,
         }}
         tabLabelStyle={{
           color: "white",
+          fontSize: 15,
+        }}
+        tabHeaderStyle={{
+          borderBottomColor: AppColors.White,
+          borderBottomWidth: Spaces.Xxs,
+          backgroundColor: AppColors.DarkGrey,
         }}
         theme={{
           colors: {
