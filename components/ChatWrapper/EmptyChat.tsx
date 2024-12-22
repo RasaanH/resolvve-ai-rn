@@ -13,11 +13,13 @@ export enum ChatModes {
 interface EmptyChatProps {
   mode: ChatModes;
   send: SendFn;
+  keyboardHeight: number;
 }
 
 export const EmptyChat = ({
   mode = ChatModes.conservative,
   send,
+  keyboardHeight,
 }: EmptyChatProps) => {
   const prompts =
     mode === ChatModes.conservative ? conservativePrompts : liberalPrompts;
@@ -27,7 +29,7 @@ export const EmptyChat = ({
   ));
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, paddingBottom: 40 + keyboardHeight }}>
       <Text style={styles.text}>Let's Talk</Text>
       <View style={styles.promptBublesContainer}>{promptBubbles}</View>
     </View>
@@ -56,6 +58,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column-reverse",
     justifyContent: "center",
-    paddingBottom: 40,
   },
 });

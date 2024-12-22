@@ -42,7 +42,9 @@ export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
       placeholder="Message"
       alignTop={true}
       renderDay={() => null}
-      renderChatEmpty={() => <EmptyChat send={send} mode={mode} />}
+      renderChatEmpty={() => (
+        <EmptyChat keyboardHeight={keyboardHeight} send={send} mode={mode} />
+      )}
       inverted={messageList.length !== 0}
       renderAvatarOnTop={true}
       renderTime={() => null}
