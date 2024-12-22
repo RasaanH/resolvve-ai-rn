@@ -1,6 +1,6 @@
 import { IMessage } from "react-native-gifted-chat";
 import "../assets/images/adaptive-icon.png";
-const regularUser = {
+export const regularUser = {
   _id: 224687234,
   name: "You",
 };

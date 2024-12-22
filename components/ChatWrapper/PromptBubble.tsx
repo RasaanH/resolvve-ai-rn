@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { SendFn } from "./ChatBody";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
+import { regularUser } from "@/constants/MockData";
 interface PromptBubbleProps {
   text: string;
   onClick: SendFn;
@@ -13,6 +14,16 @@ export const PromptBubble = ({ text, onClick }: PromptBubbleProps) => (
     textColor={AppColors.Black}
     style={styles.buttonContainer}
     labelStyle={styles.buttonLabel}
+    onPress={() =>
+      onClick([
+        {
+          _id: 2246872341,
+          text: text,
+          createdAt: new Date(),
+          user: regularUser,
+        },
+      ])
+    }
   >
     {text}
   </Button>
