@@ -41,3 +41,12 @@ export const mockMessages: IMessage[] = [
     user: regularUser,
   },
 ];
+
+export const defaultMessage: IMessage[] = [
+  {
+    _id: 9165152772,
+    text: "How can I help you?",
+    createdAt: new Date(),
+    user: systemUser,
+  },
+];
