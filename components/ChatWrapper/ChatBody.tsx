@@ -97,7 +97,7 @@ export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
             {...props}
             textStyle={{
               right: {
-                color: "white",
+                color: AppColors.Black,
               },
               left: {
                 color: "white",
@@ -109,7 +109,7 @@ export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
                 padding: 5,
               },
               right: {
-                backgroundColor: AppColors.DarkNavy,
+                backgroundColor: AppColors.LightGrey,
                 padding: 5,
               },
             }}
