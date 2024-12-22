@@ -7,7 +7,7 @@ export const regularUser = {
 export const systemUser = {
   _id: 916515277,
   name: "GPT",
-  avatar: require("../assets/images/adaptive-icon.png"),
+  avatar: require("../assets/images/Gram.png"),
 };
 export const mockMessages: IMessage[] = [
   {
