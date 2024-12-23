@@ -9,9 +9,7 @@ export default function RootLayout() {
     <PaperProvider>
       <Drawer
         screenOptions={{
-          drawerStyle: {
-            width: "20%",
-          },
+          drawerStyle: {},
           headerShown: true,
         }}
       >
