@@ -1,7 +1,13 @@
 import { IMessage } from "react-native-gifted-chat";
 import { v4 as uuidv4 } from "uuid";
-import { systemUser } from "@/constants/MockData";
-import { ValidatePasswordArgs, SignUpValidationObj } from "@/constants/Types";
+import { systemUser, regularUser } from "@/constants/MockData";
+import {
+  ValidatePasswordArgs,
+  SignUpValidationObj,
+  OpenAiMessage,
+  OpenAiMessageContent,
+  OpenAiMessageRole,
+} from "@/constants/Types";
 
 export const mockChatCall = (messages: IMessage[]): Promise<IMessage[]> => {
   const fakeId = uuidv4();
@@ -42,4 +48,28 @@ export const validateSignUp = ({
     responseObj.email = "invlaid email address";
   }
   return responseObj;
+};
+
+export const uiToOpenAiMessages = (messages: IMessage[]): OpenAiMessage[] => {
+  const newMessages = messages.map((value) => {
+    const role: OpenAiMessageRole =
+      value.user.name === "GPT" ? "assistant" : "user";
+    const text = value.text as unknown as OpenAiMessageContent;
+    return { role, content: text };
+  });
+  return newMessages;
+};
+
+export const openAiToUiMessages = (messages: OpenAiMessage[]): IMessage[] => {
+  const newMessages = messages.map((value) => {
+    const messageUid = uuidv4();
+    const user = value.role === "assistant" ? systemUser : regularUser;
+    console.log("value content", value.content);
+    const text = Array.isArray(value.content)
+      ? (value.content[0].text as any)?.value
+      : value.content.text;
+    const createdAt = new Date();
+    return { _id: messageUid, text, createdAt, user };
+  });
+  return newMessages;
 };

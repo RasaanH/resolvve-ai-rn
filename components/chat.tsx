@@ -10,6 +10,7 @@ import { Spaces } from "@/constants/Spacing";
 import { ChatBody } from "./ChatWrapper/ChatBody";
 import { ChatModes } from "./ChatWrapper/EmptyChat";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { openAiToUiMessages } from "@/utility-functions/utils";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -34,7 +35,8 @@ export const Chat = () => {
       const { data } = responseMessages;
 
       console.log("data from response", JSON.stringify(data));
-      setMessageList([...data]);
+      const newMessages = openAiToUiMessages(data);
+      setMessageList([...newMessages]);
     } catch (err) {
       console.log("something went wrong", err);
     }
