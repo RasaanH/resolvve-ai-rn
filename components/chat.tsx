@@ -7,9 +7,9 @@ import { useState } from "react";
 import { IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
-import { mockChatCall } from "@/utility-functions/utils";
 import { ChatBody } from "./ChatWrapper/ChatBody";
 import { ChatModes } from "./ChatWrapper/EmptyChat";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -19,13 +19,22 @@ export const Chat = () => {
   const [messageList, setMessageList] = useState(defaultMessage);
   const [tabIndex, setTabIndex] = useState(0);
 
+  const functions = getFunctions();
+  const chatService = httpsCallable<any, any[]>(functions, "chatService");
+
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
     setMessageList([...newMessages]);
     Keyboard.dismiss();
     try {
-      const responseMessages = await mockChatCall([...newMessages]);
-      setMessageList([...responseMessages]);
+      const responseMessages = await chatService({
+        assistantName: "conservative",
+        message: { role: "user", content: "Who is your favorite president?" },
+      });
+      const { data } = responseMessages;
+
+      console.log("data from response", JSON.stringify(data));
+      setMessageList([...data]);
     } catch (err) {
       console.log("something went wrong", err);
     }
