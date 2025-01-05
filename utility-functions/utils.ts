@@ -66,7 +66,6 @@ export const openAiToUiMessages = (messages: OpenAiMessage[]): IMessage[] => {
   const newMessages = messages.map((value) => {
     const messageUid = uuidv4();
     const user = value.role === "assistant" ? systemUser : regularUser;
-    console.log("value content", value.content);
     const text = Array.isArray(value.content)
       ? (value.content[0].text as any)?.value
       : value.content.text;
