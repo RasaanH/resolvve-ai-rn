@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { Button } from "react-native-paper";
 import { View, StyleSheet, Keyboard } from "react-native";
 import { defaultMessage } from "@/constants/MockData";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
@@ -15,6 +15,7 @@ import {
   uiToOpenAiMessages,
   getAssistantFromTabIndex,
 } from "@/utility-functions/utils";
+import { ChatServiceResponse } from "@/constants/Types";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -23,9 +24,13 @@ const navigateToAbout = () => {
 export const Chat = () => {
   const [messageList, setMessageList] = useState(defaultMessage);
   const [tabIndex, setTabIndex] = useState(0);
+  const thread_id = useRef("");
 
   const functions = getFunctions();
-  const chatService = httpsCallable<any, any[]>(functions, "chatService");
+  const chatService = httpsCallable<any, ChatServiceResponse>(
+    functions,
+    "chatService"
+  );
 
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
@@ -34,15 +39,23 @@ export const Chat = () => {
     const message = uiToOpenAiMessages([newMessage])[0];
     const assistantName = getAssistantFromTabIndex(tabIndex);
     Keyboard.dismiss();
+    console.log("request params", {
+      assistantName,
+      message,
+      thread_id: thread_id.current,
+    });
     try {
       const responseMessages = await chatService({
         assistantName,
         message,
+        thread_id: thread_id.current,
       });
-      const { data } = responseMessages;
-
-      console.log("data from response", JSON.stringify(data));
-      const newMessages = openAiToUiMessages(data);
+      const {
+        data: { messages, threadId },
+      } = responseMessages;
+      thread_id.current = threadId;
+      console.log("data from response", JSON.stringify({ messages, threadId }));
+      const newMessages = openAiToUiMessages(messages);
       setMessageList([...newMessages]);
     } catch (err) {
       console.log("something went wrong", err);
@@ -50,7 +63,7 @@ export const Chat = () => {
   };
   const onTabChange = (index: number) => {
     setMessageList(defaultMessage);
-
+    thread_id.current = "";
     setTabIndex(index);
   };
 

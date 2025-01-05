@@ -27,3 +27,8 @@ export interface OpenAiMessage {
   role: OpenAiMessageRole;
   content: OpenAiMessageContent[] | OpenAiMessageContent;
 }
+
+export interface ChatServiceResponse {
+  messages: OpenAiMessage[];
+  threadId: string;
+}
