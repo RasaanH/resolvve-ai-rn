@@ -10,7 +10,11 @@ import { Spaces } from "@/constants/Spacing";
 import { ChatBody } from "./ChatWrapper/ChatBody";
 import { ChatModes } from "./ChatWrapper/EmptyChat";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { openAiToUiMessages } from "@/utility-functions/utils";
+import {
+  openAiToUiMessages,
+  uiToOpenAiMessages,
+  getAssistantFromTabIndex,
+} from "@/utility-functions/utils";
 
 const navigateToAbout = () => {
   router.navigate("/about");
@@ -26,11 +30,14 @@ export const Chat = () => {
   const send = async (messages: IMessage[]) => {
     const newMessages = [...messages, ...messageList];
     setMessageList([...newMessages]);
+    const newMessage = newMessages[0];
+    const message = uiToOpenAiMessages([newMessage])[0];
+    const assistantName = getAssistantFromTabIndex(tabIndex);
     Keyboard.dismiss();
     try {
       const responseMessages = await chatService({
-        assistantName: "conservative",
-        message: { role: "user", content: "Who is your favorite president?" },
+        assistantName,
+        message,
       });
       const { data } = responseMessages;
 

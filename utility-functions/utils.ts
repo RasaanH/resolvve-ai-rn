@@ -9,6 +9,8 @@ import {
   OpenAiMessageRole,
 } from "@/constants/Types";
 
+import { ChatModes } from "@/components/ChatWrapper/EmptyChat";
+
 export const mockChatCall = (messages: IMessage[]): Promise<IMessage[]> => {
   const fakeId = uuidv4();
   console.log({ fakeId });
@@ -72,4 +74,12 @@ export const openAiToUiMessages = (messages: OpenAiMessage[]): IMessage[] => {
     return { _id: messageUid, text, createdAt, user };
   });
   return newMessages;
+};
+
+export const getAssistantFromTabIndex = (tabIndex: number): ChatModes => {
+  const assistants: Record<number, ChatModes> = {
+    0: ChatModes.conservative,
+    1: ChatModes.liberal,
+  };
+  return assistants?.[tabIndex] || ChatModes.liberal;
 };
