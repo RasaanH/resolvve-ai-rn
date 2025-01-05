@@ -39,11 +39,6 @@ export const Chat = () => {
     const message = uiToOpenAiMessages([newMessage])[0];
     const assistantName = getAssistantFromTabIndex(tabIndex);
     Keyboard.dismiss();
-    console.log("request params", {
-      assistantName,
-      message,
-      thread_id: thread_id.current,
-    });
     try {
       const responseMessages = await chatService({
         assistantName,
@@ -94,7 +89,7 @@ export const Chat = () => {
         mode="fixed"
         disableSwipe={true}
       >
-        <TabScreen label="Conservative" icon="elephant">
+        <TabScreen label="MAGA" icon="elephant">
           <View style={styles.backgroundForChat}>
             {tabIndex === 0 && (
               <ChatBody messageList={messageList} send={send} mode={mode} />
