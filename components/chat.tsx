@@ -24,6 +24,7 @@ const navigateToAbout = () => {
 export const Chat = () => {
   const [messageList, setMessageList] = useState(defaultMessage);
   const [tabIndex, setTabIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
   const thread_id = useRef("");
 
   const functions = getFunctions();
@@ -40,6 +41,7 @@ export const Chat = () => {
     const assistantName = getAssistantFromTabIndex(tabIndex);
     Keyboard.dismiss();
     try {
+      setIsTyping(true);
       const responseMessages = await chatService({
         assistantName,
         message,
@@ -54,6 +56,8 @@ export const Chat = () => {
       setMessageList([...newMessages]);
     } catch (err) {
       console.log("something went wrong", err);
+    } finally {
+      setIsTyping(false);
     }
   };
   const onTabChange = (index: number) => {
@@ -92,14 +96,24 @@ export const Chat = () => {
         <TabScreen label="MAGA" icon="elephant">
           <View style={styles.backgroundForChat}>
             {tabIndex === 0 && (
-              <ChatBody messageList={messageList} send={send} mode={mode} />
+              <ChatBody
+                isTyping={isTyping}
+                messageList={messageList}
+                send={send}
+                mode={mode}
+              />
             )}
           </View>
         </TabScreen>
         <TabScreen label="Liberal" icon="donkey">
           <View style={styles.backgroundForChat}>
             {tabIndex === 1 && (
-              <ChatBody messageList={messageList} send={send} mode={mode} />
+              <ChatBody
+                isTyping={isTyping}
+                messageList={messageList}
+                send={send}
+                mode={mode}
+              />
             )}
           </View>
         </TabScreen>
