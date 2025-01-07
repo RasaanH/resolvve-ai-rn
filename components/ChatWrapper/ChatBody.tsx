@@ -13,6 +13,7 @@ interface ChatBodyProps {
   messageList: IMessage[];
   send: SendFn;
   mode: ChatModes;
+  isTyping: boolean;
 }
 
 const customtInputToolbar = (props: any) => {
@@ -46,7 +47,12 @@ const renderSend = (props: any) => {
   );
 };
 
-export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
+export const ChatBody = ({
+  messageList,
+  mode,
+  send,
+  isTyping,
+}: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -70,9 +76,12 @@ export const ChatBody = ({ messageList, mode, send }: ChatBodyProps) => {
     };
   }, []);
 
+  /**consider renderFooter to show a better loading indicator */
+
   return (
     <GiftedChat
       messages={messageList}
+      isTyping={isTyping}
       placeholder="Message"
       alignTop={true}
       renderDay={() => null}
