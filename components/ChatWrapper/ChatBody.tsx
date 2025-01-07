@@ -6,6 +6,7 @@ import { ChatModes, EmptyChat } from "./EmptyChat";
 import { InputToolbar, Send } from "react-native-gifted-chat";
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
+import { TypingIndicator } from "../TypingIndicator";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -76,12 +77,17 @@ export const ChatBody = ({
     };
   }, []);
 
-  /**consider renderFooter to show a better loading indicator */
+  const renderingFooter = () => {
+    if (!isTyping) {
+      return <View style={{ display: "none" }}></View>;
+    }
+    return <TypingIndicator />;
+  };
 
   return (
     <GiftedChat
       messages={messageList}
-      isTyping={isTyping}
+      renderFooter={renderingFooter}
       placeholder="Message"
       alignTop={true}
       renderDay={() => null}
