@@ -33,16 +33,17 @@ const customtInputToolbar = (props: any) => {
   );
 };
 
-const renderSend = (props: any) => {
+const renderSend = (props: any, isTyping: boolean) => {
+  const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
   return (
-    <Send {...props}>
+    <Send disabled={isTyping} {...props}>
       <View
         style={{
           marginBottom: 5,
           marginRight: 5,
         }}
       >
-        <MaterialIcons size={25} color={AppColors.Black} name="send" />
+        <MaterialIcons size={25} color={iconColor} name="send" />
       </View>
     </Send>
   );
@@ -95,7 +96,7 @@ export const ChatBody = ({
         <EmptyChat keyboardHeight={keyboardHeight} send={send} mode={mode} />
       )}
       renderInputToolbar={(props) => customtInputToolbar(props)}
-      renderSend={(props) => renderSend(props)}
+      renderSend={(props) => renderSend(props, isTyping)}
       inverted={messageList.length !== 0}
       renderAvatarOnTop={true}
       renderTime={() => null}
@@ -116,12 +117,17 @@ export const ChatBody = ({
               },
               left: {
                 color: "white",
+                paddingTop: 0,
+                marginTop: 0,
               },
             }}
             wrapperStyle={{
               left: {
                 backgroundColor: "transparent",
-                padding: 5,
+                paddingLeft: 5,
+                paddingRight: 5,
+                paddingBottom: 5,
+                paddingTop: 0,
               },
               right: {
                 backgroundColor: AppColors.LightGrey,
