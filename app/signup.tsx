@@ -108,6 +108,7 @@ export default function SignUp() {
     }
     return `${message}, ${value}`;
   });
+  const displaySignUp = isValid ? "flex" : "none";
   return (
     <View style={styles.background}>
       <View style={styles.headerContainer}>
@@ -167,6 +168,8 @@ export default function SignUp() {
             mode="elevated"
             onPress={handleSubmit}
             disabled={!isValid}
+            textColor={AppColors.Black}
+            style={{ ...styles.buttons, display: displaySignUp }}
           >
             Continue
           </Button>
@@ -174,6 +177,8 @@ export default function SignUp() {
             icon="login"
             mode="elevated"
             onPress={() => console.log("Pressed")}
+            textColor={AppColors.Black}
+            style={styles.buttons}
           >
             Login
           </Button>
@@ -242,5 +247,8 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: "90%",
+  },
+  buttons: {
+    marginVertical: Spaces.M,
   },
 });

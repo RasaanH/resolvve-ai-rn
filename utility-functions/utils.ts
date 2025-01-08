@@ -47,7 +47,7 @@ export const validateSignUp = ({
     responseObj.confirmPassword = "Passwords do not match";
   }
   if (!isValidEmail(email)) {
-    responseObj.email = "invlaid email address";
+    responseObj.email = "Invlaid email address";
   }
   return responseObj;
 };
