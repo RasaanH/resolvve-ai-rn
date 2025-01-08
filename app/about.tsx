@@ -8,7 +8,7 @@ export default function About() {
     <View style={styles.backgroundContainer}>
       <View style={styles.unitContainer}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>About Balance GPT</Text>
+          <Text style={styles.headerText}>Balance GPT</Text>
         </View>
         <Text style={styles.pagragraphText}>
           Making AI better isn't about getting closer to the one true narrative.
