@@ -42,6 +42,7 @@ export default function RootLayout() {
           name="signup"
           options={{
             drawerLabel: "Sign Up",
+            unmountOnBlur: true,
             title: "Sign Up",
             headerLeft: () => (
               <IconButton
