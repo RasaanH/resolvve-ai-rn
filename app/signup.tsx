@@ -14,6 +14,7 @@ export default function SignUp() {
   const [isValid, setIsValid] = useState(false);
   const [snackBarVisible, setSnackBarVisible] = useState(false);
   const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
+  const [signUpMode, setSignUpMode] = useState(true);
   const defaultErrorMessage = {
     password: null,
     email: null,
@@ -30,6 +31,10 @@ export default function SignUp() {
     }, 2000);
   };
 
+  const swapMode = () => {
+    setSignUpMode((prevMode) => !prevMode);
+  };
+
   const showErrorSnackbar = () => {
     setErrorSnackbarVisible(true);
     setTimeout(() => {
@@ -38,6 +43,8 @@ export default function SignUp() {
   };
 
   const auth = getAuth();
+
+  const swapButtonText = signUpMode ? "Login" : "Sign Up";
 
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -143,20 +150,22 @@ export default function SignUp() {
           onChangeText={handlePasswordChange}
           secureTextEntry={true}
         />
-        <TextInput
-          label="Confirm Password"
-          mode="outlined"
-          textColor={AppColors.White}
-          activeOutlineColor={AppColors.White}
-          value={confirmPassword}
-          style={[
-            styles.input,
-            !!errorMessage?.confirmPassword ? styles.invalidInput : null,
-          ]}
-          onChangeText={handleConfirmPasswordChange}
-          onSubmitEditing={handleSubmit}
-          secureTextEntry={true}
-        />
+        {signUpMode && (
+          <TextInput
+            label="Confirm Password"
+            mode="outlined"
+            textColor={AppColors.White}
+            activeOutlineColor={AppColors.White}
+            value={confirmPassword}
+            style={[
+              styles.input,
+              !!errorMessage?.confirmPassword ? styles.invalidInput : null,
+            ]}
+            onChangeText={handleConfirmPasswordChange}
+            onSubmitEditing={handleSubmit}
+            secureTextEntry={true}
+          />
+        )}
         <View>
           {errorMessage ? (
             <Text style={styles.error}>{errorString}</Text>
@@ -176,11 +185,11 @@ export default function SignUp() {
           <Button
             icon="login"
             mode="elevated"
-            onPress={() => console.log("Pressed")}
+            onPress={swapMode}
             textColor={AppColors.Black}
             style={styles.buttons}
           >
-            Login
+            {swapButtonText}
           </Button>
         </View>
         <Snackbar
