@@ -3,10 +3,10 @@ import { useState } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { firebaseApp } from ".";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
+import { Spaces } from "@/constants/Spacing";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -37,7 +37,7 @@ export default function SignUp() {
     }, 4000);
   };
 
-  const auth = getAuth(firebaseApp);
+  const auth = getAuth();
 
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -110,82 +110,99 @@ export default function SignUp() {
   });
   return (
     <View style={styles.background}>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={handleEmailChange}
-        onSubmitEditing={handleSubmit}
-        style={[
-          styles.input,
-          !!errorMessage?.email ? styles.invalidInput : null,
-        ]}
-      />
-      <TextInput
-        style={[
-          styles.input,
-          !!errorMessage?.password ? styles.invalidInput : null,
-        ]}
-        label="Password"
-        value={password}
-        onSubmitEditing={handleSubmit}
-        onChangeText={handlePasswordChange}
-        secureTextEntry={true}
-      />
-      <TextInput
-        label="Confirm Password"
-        value={confirmPassword}
-        style={[
-          styles.input,
-          !!errorMessage?.confirmPassword ? styles.invalidInput : null,
-        ]}
-        onChangeText={handleConfirmPasswordChange}
-        onSubmitEditing={handleSubmit}
-        secureTextEntry={true}
-      />
-      <View>
-        {errorMessage ? <Text style={styles.error}>{errorString}</Text> : null}
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Balance GPT</Text>
       </View>
-      <View>
-        <Button
-          icon="account-plus-outline"
-          mode="elevated"
-          onPress={handleSubmit}
-          disabled={!isValid}
+      <View style={styles.bodyContainer}>
+        <TextInput
+          label="Email"
+          mode="outlined"
+          textColor={AppColors.White}
+          activeOutlineColor={AppColors.White}
+          value={email}
+          onChangeText={handleEmailChange}
+          onSubmitEditing={handleSubmit}
+          style={[
+            styles.input,
+            !!errorMessage?.email ? styles.invalidInput : null,
+          ]}
+        />
+        <TextInput
+          style={[
+            styles.input,
+            !!errorMessage?.password ? styles.invalidInput : null,
+          ]}
+          label="Password"
+          mode="outlined"
+          textColor={AppColors.White}
+          activeOutlineColor={AppColors.White}
+          placeholderTextColor={"blue"}
+          value={password}
+          onSubmitEditing={handleSubmit}
+          onChangeText={handlePasswordChange}
+          secureTextEntry={true}
+        />
+        <TextInput
+          label="Confirm Password"
+          mode="outlined"
+          textColor={AppColors.White}
+          activeOutlineColor={AppColors.White}
+          value={confirmPassword}
+          style={[
+            styles.input,
+            !!errorMessage?.confirmPassword ? styles.invalidInput : null,
+          ]}
+          onChangeText={handleConfirmPasswordChange}
+          onSubmitEditing={handleSubmit}
+          secureTextEntry={true}
+        />
+        <View>
+          {errorMessage ? (
+            <Text style={styles.error}>{errorString}</Text>
+          ) : null}
+        </View>
+        <View>
+          <Button
+            icon="account-plus-outline"
+            mode="elevated"
+            onPress={handleSubmit}
+            disabled={!isValid}
+          >
+            Continue
+          </Button>
+          <Button
+            icon="login"
+            mode="elevated"
+            onPress={() => console.log("Pressed")}
+          >
+            Login
+          </Button>
+        </View>
+        <Snackbar
+          visible={snackBarVisible}
+          onDismiss={() => {}}
+          action={{
+            label: "close",
+            onPress: () => {
+              setSnackBarVisible(false);
+            },
+          }}
         >
-          Continue
-        </Button>
-        <Button
-          icon="login"
-          mode="elevated"
-          onPress={() => console.log("Pressed")}
+          You've succesfully signed up!
+        </Snackbar>
+        <Snackbar
+          visible={errorSnackbarVisible}
+          onDismiss={() => {}}
+          action={{
+            label: "close",
+            onPress: () => {
+              setErrorSnackbarVisible(false);
+            },
+          }}
         >
-          Login
-        </Button>
+          Error Signing Up
+        </Snackbar>
       </View>
-      <Snackbar
-        visible={snackBarVisible}
-        onDismiss={() => {}}
-        action={{
-          label: "close",
-          onPress: () => {
-            setSnackBarVisible(false);
-          },
-        }}
-      >
-        You've succesfully signed up!
-      </Snackbar>
-      <Snackbar
-        visible={errorSnackbarVisible}
-        onDismiss={() => {}}
-        action={{
-          label: "close",
-          onPress: () => {
-            setErrorSnackbarVisible(false);
-          },
-        }}
-      >
-        Error Signing Up
-      </Snackbar>
     </View>
   );
 }
@@ -198,19 +215,32 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: AppColors.DarkGrey,
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spaces.XL,
   },
   error: {
     color: "red",
     marginBottom: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    marginVertical: Spaces.M,
+    backgroundColor: AppColors.DarkGrey,
   },
   invalidInput: {
     borderColor: "red",
+  },
+  headerText: {
+    color: AppColors.White,
+    fontSize: 32,
+    textAlign: "center",
+  },
+  headerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: Spaces.XXL,
+  },
+  bodyContainer: {
+    width: "90%",
   },
 });
