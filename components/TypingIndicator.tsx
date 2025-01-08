@@ -6,9 +6,9 @@ export const TypingIndicator = () => {
       <TypingAnimation
         dotColor="white"
         dotMargin={8}
-        dotAmplitude={3}
-        dotSpeed={0.15}
-        dotRadius={5}
+        dotAmplitude={2}
+        dotSpeed={0.18}
+        dotRadius={4}
         dotX={30}
         dotY={10}
       />
