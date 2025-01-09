@@ -13,7 +13,6 @@ export const AuthProvider = (props: any) => {
     if (user) {
       setUser(user);
     } else {
-      console.log("At this point, there is no user");
       setUser(undefined);
     }
   });

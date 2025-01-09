@@ -10,7 +10,6 @@ export default function RootLayout() {
   const [authPageName, setAuthPageName] = useState("Sign Up");
   const auth = getAuth();
   const user = auth.currentUser;
-  console.log({ user });
   onAuthStateChanged(auth, (authState) => {
     if (!auth.currentUser) {
       signInAnonymously(auth);
