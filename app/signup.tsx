@@ -1,8 +1,12 @@
 import { View, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
@@ -63,6 +67,23 @@ export default function SignUp() {
       });
   };
 
+  const loginWithEmail = async () => {
+    if (!email || !password) {
+      return;
+    }
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log({ userCredentials });
+    } catch (err) {
+      console.log("error signing in", err);
+      showErrorSnackbar();
+    }
+  };
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if (value && confirmPassword && password) {
@@ -95,12 +116,20 @@ export default function SignUp() {
   };
 
   const handleSubmit = () => {
-    const responseObj = validateSignUp({ password, confirmPassword, email });
+    const responseObj = validateSignUp({
+      password,
+      confirmPassword,
+      email,
+      signUp: signUpMode,
+    });
     const validForm = Object.values(responseObj).every(
       (value) => value === null
     );
     if (validForm) {
       setErrorMessage(defaultErrorMessage);
+      if (!signUpMode) {
+        return loginWithEmail();
+      }
       createEmailUser();
     } else {
       setErrorMessage(responseObj);
@@ -176,7 +205,7 @@ export default function SignUp() {
             icon="account-plus-outline"
             mode="elevated"
             onPress={handleSubmit}
-            disabled={!isValid}
+            disabled={signUpMode ? !isValid : !(email && password)}
             textColor={AppColors.Black}
             style={{ ...styles.buttons, display: displaySignUp }}
           >

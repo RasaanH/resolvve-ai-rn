@@ -3,6 +3,7 @@ export interface ValidatePasswordArgs {
   password: string;
   confirmPassword: string;
   email: string;
+  signUp: boolean;
 }
 
 export interface SignUpValidationObj {
