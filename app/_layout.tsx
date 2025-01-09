@@ -7,8 +7,11 @@ import { useState } from "react";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
 export default function RootLayout() {
-  const [authPageName, setAuthPageName] = useState("Sign Up");
+  const signUpText = "Sign Up / Login";
+  const logoutText = "Log Out";
+  const [authPageName, setAuthPageName] = useState(signUpText);
   const auth = getAuth();
+
   const user = auth.currentUser;
   onAuthStateChanged(auth, (authState) => {
     if (!auth.currentUser) {
@@ -16,10 +19,10 @@ export default function RootLayout() {
       return;
     }
     if (authState?.isAnonymous) {
-      setAuthPageName("Sign Up");
+      setAuthPageName(signUpText);
       return;
     }
-    setAuthPageName("Log Out");
+    setAuthPageName(logoutText);
     router.navigate("/");
   });
   return (
@@ -60,7 +63,7 @@ export default function RootLayout() {
           options={{
             drawerLabel: authPageName,
             unmountOnBlur: true,
-            title: authPageName,
+            title: "Authentication",
             headerLeft: () => (
               <IconButton
                 icon="keyboard-backspace"

@@ -7,6 +7,7 @@ import {
   getAuth,
   signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
@@ -19,6 +20,7 @@ export default function SignUp() {
   const [isValid, setIsValid] = useState(false);
   const [snackBarVisible, setSnackBarVisible] = useState(false);
   const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
+  const [errorSnackMessage, setErrorSnackMessage] = useState("");
   const [signUpMode, setSignUpMode] = useState(true);
   const defaultErrorMessage = {
     password: null,
@@ -40,14 +42,33 @@ export default function SignUp() {
     setSignUpMode((prevMode) => !prevMode);
   };
 
-  const showErrorSnackbar = () => {
+  const showErrorSnackbar = (text?: string) => {
+    setErrorSnackMessage(text || "");
     setErrorSnackbarVisible(true);
     setTimeout(() => {
       setErrorSnackbarVisible(false);
+      setErrorSnackMessage("");
     }, 4000);
   };
 
   const auth = getAuth();
+
+  const forgotPasswordClick = async () => {
+    if (!email) {
+      showErrorSnackbar("Enter email above");
+      return;
+    }
+    try {
+      const result = await sendPasswordResetEmail(auth, email);
+      console.log({ result });
+      if (result === undefined) {
+        showErrorSnackbar("Success");
+      }
+    } catch (err) {
+      console.log(JSON.stringify(err));
+      showErrorSnackbar((err as any)?.code || "");
+    }
+  };
   useEffect(() => {
     if (auth.currentUser?.isAnonymous === false) {
       signOut(auth);
@@ -152,7 +173,9 @@ export default function SignUp() {
   });
   const displayActionButton = signUpMode ? isValid : email && password;
   const displaySignUpStyle = displayActionButton ? "flex" : "none";
-  const errorSnackbarMessage = signUpMode
+  const errorSnackbarMessage = errorSnackMessage
+    ? errorSnackMessage
+    : signUpMode
     ? "Failed to sign up"
     : "Failed to login";
   return (
@@ -189,6 +212,11 @@ export default function SignUp() {
           onChangeText={handlePasswordChange}
           secureTextEntry={true}
         />
+        {!signUpMode && (
+          <Text style={styles.forgotPwText} onPress={forgotPasswordClick}>
+            Reset Password
+          </Text>
+        )}
         {signUpMode && (
           <TextInput
             label="Confirm Password"
@@ -298,5 +326,9 @@ const styles = StyleSheet.create({
   },
   buttons: {
     marginVertical: Spaces.M,
+  },
+  forgotPwText: {
+    marginTop: Spaces.M,
+    color: AppColors.Grey,
   },
 });
