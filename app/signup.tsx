@@ -60,12 +60,10 @@ export default function SignUp() {
     }
     try {
       const result = await sendPasswordResetEmail(auth, email);
-      console.log({ result });
       if (result === undefined) {
         showErrorSnackbar("Success");
       }
     } catch (err) {
-      console.log(JSON.stringify(err));
       showErrorSnackbar((err as any)?.code || "");
     }
   };
@@ -104,7 +102,6 @@ export default function SignUp() {
         email,
         password
       );
-      console.log({ userCredentials });
     } catch (err) {
       console.log("error signing in", err);
       showErrorSnackbar();
