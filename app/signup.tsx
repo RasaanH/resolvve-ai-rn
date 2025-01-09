@@ -5,6 +5,7 @@ import { AppColors } from "@/constants/Colors";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { validateSignUp } from "@/utility-functions/utils";
@@ -47,6 +48,11 @@ export default function SignUp() {
   };
 
   const auth = getAuth();
+  useEffect(() => {
+    if (auth.currentUser?.isAnonymous === false) {
+      signOut(auth);
+    }
+  }, []);
 
   const swapButtonText = signUpMode ? "Login" : "Sign Up";
 
@@ -144,7 +150,11 @@ export default function SignUp() {
     }
     return `${message}, ${value}`;
   });
-  const displaySignUp = isValid ? "flex" : "none";
+  const displayActionButton = signUpMode ? isValid : email && password;
+  const displaySignUpStyle = displayActionButton ? "flex" : "none";
+  const errorSnackbarMessage = signUpMode
+    ? "Failed to sign up"
+    : "Failed to login";
   return (
     <View style={styles.background}>
       <View style={styles.headerContainer}>
@@ -207,7 +217,7 @@ export default function SignUp() {
             onPress={handleSubmit}
             disabled={signUpMode ? !isValid : !(email && password)}
             textColor={AppColors.Black}
-            style={{ ...styles.buttons, display: displaySignUp }}
+            style={{ ...styles.buttons, display: displaySignUpStyle }}
           >
             Continue
           </Button>
@@ -243,7 +253,7 @@ export default function SignUp() {
             },
           }}
         >
-          Error Signing Up
+          {errorSnackbarMessage}
         </Snackbar>
       </View>
     </View>

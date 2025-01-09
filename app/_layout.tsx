@@ -3,8 +3,26 @@ import { Drawer } from "expo-router/drawer";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { router } from "expo-router";
 import { IconButton } from "react-native-paper";
+import { useState } from "react";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
 export default function RootLayout() {
+  const [authPageName, setAuthPageName] = useState("Sign Up");
+  const auth = getAuth();
+  const user = auth.currentUser;
+  console.log({ user });
+  onAuthStateChanged(auth, (authState) => {
+    if (!auth.currentUser) {
+      signInAnonymously(auth);
+      return;
+    }
+    if (authState?.isAnonymous) {
+      setAuthPageName("Sign Up");
+      return;
+    }
+    setAuthPageName("Log Out");
+    router.navigate("/");
+  });
   return (
     <PaperProvider>
       <Drawer
@@ -41,9 +59,9 @@ export default function RootLayout() {
         <Drawer.Screen
           name="signup"
           options={{
-            drawerLabel: "Sign Up",
+            drawerLabel: authPageName,
             unmountOnBlur: true,
-            title: "Sign Up",
+            title: authPageName,
             headerLeft: () => (
               <IconButton
                 icon="keyboard-backspace"
