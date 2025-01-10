@@ -30,9 +30,27 @@ export default function RootLayout() {
       <Drawer
         screenOptions={{
           drawerStyle: {},
+          drawerLabelStyle: { fontSize: 16 },
           headerShown: true,
         }}
       >
+        <Drawer.Screen
+          name="redirecthome"
+          options={{
+            drawerLabel: "Reset Chat",
+            title: "Reset Chat",
+            unmountOnBlur: true,
+            headerLeft: () => (
+              <IconButton
+                icon="keyboard-backspace"
+                size={25}
+                iconColor="black"
+                onPress={() => router.navigate("/")}
+              />
+            ),
+            swipeEdgeWidth: 0,
+          }}
+        />
         <Drawer.Screen
           name="index"
           options={{
@@ -41,6 +59,7 @@ export default function RootLayout() {
             headerLeft: () => <DrawerToggleButton />,
             swipeEdgeWidth: 0,
             drawerItemStyle: { display: "none" },
+            unmountOnBlur: true,
           }}
         />
         <Drawer.Screen
