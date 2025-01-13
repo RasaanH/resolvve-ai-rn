@@ -63,6 +63,22 @@ export default function RootLayout() {
           }}
         />
         <Drawer.Screen
+          name="subscription"
+          options={{
+            drawerLabel: "Subscription",
+            unmountOnBlur: true,
+            title: "Subscription",
+            headerLeft: () => (
+              <IconButton
+                icon="keyboard-backspace"
+                size={25}
+                iconColor="black"
+                onPress={() => router.navigate("/")}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
           name="about"
           options={{
             drawerLabel: "About",
