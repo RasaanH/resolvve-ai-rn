@@ -3,19 +3,22 @@ import { Drawer } from "expo-router/drawer";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { router } from "expo-router";
 import { IconButton } from "react-native-paper";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
 export default function RootLayout() {
   const signUpText = "Sign Up / Login";
   const logoutText = "Log Out";
+  const isSigningInAnonymously = useRef(false);
   const [authPageName, setAuthPageName] = useState(signUpText);
   const auth = getAuth();
 
   const user = auth.currentUser;
-  onAuthStateChanged(auth, (authState) => {
-    if (!auth.currentUser) {
-      signInAnonymously(auth);
+  onAuthStateChanged(auth, async (authState) => {
+    if (!auth.currentUser && isSigningInAnonymously.current === false) {
+      isSigningInAnonymously.current = true;
+      await signInAnonymously(auth);
+      isSigningInAnonymously.current = false;
       return;
     }
     if (authState?.isAnonymous) {
