@@ -50,6 +50,9 @@ export const Chat = () => {
       const {
         data: { messages, threadId },
       } = responseMessages;
+      if (messages.length === 0 && threadId === "") {
+        return router.navigate("/subscription");
+      }
       thread_id.current = threadId;
       console.log("data from response", JSON.stringify({ messages, threadId }));
       const newMessages = openAiToUiMessages(messages);

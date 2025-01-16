@@ -1,12 +1,18 @@
 import { View, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { firebaseApp } from ".";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signOut,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
+import { Spaces } from "@/constants/Spacing";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -14,6 +20,8 @@ export default function SignUp() {
   const [isValid, setIsValid] = useState(false);
   const [snackBarVisible, setSnackBarVisible] = useState(false);
   const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
+  const [errorSnackMessage, setErrorSnackMessage] = useState("");
+  const [signUpMode, setSignUpMode] = useState(true);
   const defaultErrorMessage = {
     password: null,
     email: null,
@@ -30,14 +38,42 @@ export default function SignUp() {
     }, 2000);
   };
 
-  const showErrorSnackbar = () => {
+  const swapMode = () => {
+    setSignUpMode((prevMode) => !prevMode);
+  };
+
+  const showErrorSnackbar = (text?: string) => {
+    setErrorSnackMessage(text || "");
     setErrorSnackbarVisible(true);
     setTimeout(() => {
       setErrorSnackbarVisible(false);
+      setErrorSnackMessage("");
     }, 4000);
   };
 
-  const auth = getAuth(firebaseApp);
+  const auth = getAuth();
+
+  const forgotPasswordClick = async () => {
+    if (!email) {
+      showErrorSnackbar("Enter email above");
+      return;
+    }
+    try {
+      const result = await sendPasswordResetEmail(auth, email);
+      if (result === undefined) {
+        showErrorSnackbar("Success");
+      }
+    } catch (err) {
+      showErrorSnackbar((err as any)?.code || "");
+    }
+  };
+  useEffect(() => {
+    if (auth.currentUser?.isAnonymous === false) {
+      signOut(auth);
+    }
+  }, []);
+
+  const swapButtonText = signUpMode ? "Login" : "Sign Up";
 
   const createEmailUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -54,6 +90,22 @@ export default function SignUp() {
         });
         showErrorSnackbar();
       });
+  };
+
+  const loginWithEmail = async () => {
+    if (!email || !password) {
+      return;
+    }
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+    } catch (err) {
+      console.log("error signing in", err);
+      showErrorSnackbar();
+    }
   };
 
   const handleEmailChange = (value: string) => {
@@ -88,12 +140,20 @@ export default function SignUp() {
   };
 
   const handleSubmit = () => {
-    const responseObj = validateSignUp({ password, confirmPassword, email });
+    const responseObj = validateSignUp({
+      password,
+      confirmPassword,
+      email,
+      signUp: signUpMode,
+    });
     const validForm = Object.values(responseObj).every(
       (value) => value === null
     );
     if (validForm) {
       setErrorMessage(defaultErrorMessage);
+      if (!signUpMode) {
+        return loginWithEmail();
+      }
       createEmailUser();
     } else {
       setErrorMessage(responseObj);
@@ -108,84 +168,119 @@ export default function SignUp() {
     }
     return `${message}, ${value}`;
   });
+  const displayActionButton = signUpMode ? isValid : email && password;
+  const displaySignUpStyle = displayActionButton ? "flex" : "none";
+  const errorSnackbarMessage = errorSnackMessage
+    ? errorSnackMessage
+    : signUpMode
+    ? "Failed to sign up"
+    : "Failed to login";
   return (
     <View style={styles.background}>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={handleEmailChange}
-        onSubmitEditing={handleSubmit}
-        style={[
-          styles.input,
-          !!errorMessage?.email ? styles.invalidInput : null,
-        ]}
-      />
-      <TextInput
-        style={[
-          styles.input,
-          !!errorMessage?.password ? styles.invalidInput : null,
-        ]}
-        label="Password"
-        value={password}
-        onSubmitEditing={handleSubmit}
-        onChangeText={handlePasswordChange}
-        secureTextEntry={true}
-      />
-      <TextInput
-        label="Confirm Password"
-        value={confirmPassword}
-        style={[
-          styles.input,
-          !!errorMessage?.confirmPassword ? styles.invalidInput : null,
-        ]}
-        onChangeText={handleConfirmPasswordChange}
-        onSubmitEditing={handleSubmit}
-        secureTextEntry={true}
-      />
-      <View>
-        {errorMessage ? <Text style={styles.error}>{errorString}</Text> : null}
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Balance GPT</Text>
       </View>
-      <View>
-        <Button
-          icon="account-plus-outline"
-          mode="elevated"
-          onPress={handleSubmit}
-          disabled={!isValid}
+      <View style={styles.bodyContainer}>
+        <TextInput
+          label="Email"
+          mode="outlined"
+          textColor={AppColors.White}
+          activeOutlineColor={AppColors.White}
+          value={email}
+          onChangeText={handleEmailChange}
+          onSubmitEditing={handleSubmit}
+          style={[
+            styles.input,
+            !!errorMessage?.email ? styles.invalidInput : null,
+          ]}
+        />
+        <TextInput
+          style={[
+            styles.input,
+            !!errorMessage?.password ? styles.invalidInput : null,
+          ]}
+          label="Password"
+          mode="outlined"
+          textColor={AppColors.White}
+          activeOutlineColor={AppColors.White}
+          placeholderTextColor={"blue"}
+          value={password}
+          onSubmitEditing={handleSubmit}
+          onChangeText={handlePasswordChange}
+          secureTextEntry={true}
+        />
+        {!signUpMode && (
+          <Text style={styles.forgotPwText} onPress={forgotPasswordClick}>
+            Reset Password
+          </Text>
+        )}
+        {signUpMode && (
+          <TextInput
+            label="Confirm Password"
+            mode="outlined"
+            textColor={AppColors.White}
+            activeOutlineColor={AppColors.White}
+            value={confirmPassword}
+            style={[
+              styles.input,
+              !!errorMessage?.confirmPassword ? styles.invalidInput : null,
+            ]}
+            onChangeText={handleConfirmPasswordChange}
+            onSubmitEditing={handleSubmit}
+            secureTextEntry={true}
+          />
+        )}
+        <View>
+          {errorMessage ? (
+            <Text style={styles.error}>{errorString}</Text>
+          ) : null}
+        </View>
+        <View>
+          <Button
+            icon="account-plus-outline"
+            mode="elevated"
+            onPress={handleSubmit}
+            disabled={signUpMode ? !isValid : !(email && password)}
+            textColor={AppColors.Black}
+            style={{ ...styles.buttons, display: displaySignUpStyle }}
+          >
+            Continue
+          </Button>
+          <Button
+            icon="login"
+            mode="elevated"
+            onPress={swapMode}
+            textColor={AppColors.Black}
+            style={styles.buttons}
+          >
+            {swapButtonText}
+          </Button>
+        </View>
+        <Snackbar
+          visible={snackBarVisible}
+          onDismiss={() => {}}
+          action={{
+            label: "close",
+            onPress: () => {
+              setSnackBarVisible(false);
+            },
+          }}
         >
-          Continue
-        </Button>
-        <Button
-          icon="login"
-          mode="elevated"
-          onPress={() => console.log("Pressed")}
+          You've succesfully signed up!
+        </Snackbar>
+        <Snackbar
+          visible={errorSnackbarVisible}
+          onDismiss={() => {}}
+          action={{
+            label: "close",
+            onPress: () => {
+              setErrorSnackbarVisible(false);
+            },
+          }}
         >
-          Login
-        </Button>
+          {errorSnackbarMessage}
+        </Snackbar>
       </View>
-      <Snackbar
-        visible={snackBarVisible}
-        onDismiss={() => {}}
-        action={{
-          label: "close",
-          onPress: () => {
-            setSnackBarVisible(false);
-          },
-        }}
-      >
-        You've succesfully signed up!
-      </Snackbar>
-      <Snackbar
-        visible={errorSnackbarVisible}
-        onDismiss={() => {}}
-        action={{
-          label: "close",
-          onPress: () => {
-            setErrorSnackbarVisible(false);
-          },
-        }}
-      >
-        Error Signing Up
-      </Snackbar>
     </View>
   );
 }
@@ -198,19 +293,39 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: AppColors.DarkGrey,
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spaces.XL,
   },
   error: {
     color: "red",
     marginBottom: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    marginVertical: Spaces.M,
+    backgroundColor: AppColors.DarkGrey,
   },
   invalidInput: {
     borderColor: "red",
+  },
+  headerText: {
+    color: AppColors.White,
+    fontSize: 32,
+    textAlign: "center",
+  },
+  headerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: Spaces.XXL,
+  },
+  bodyContainer: {
+    width: "90%",
+  },
+  buttons: {
+    marginVertical: Spaces.M,
+  },
+  forgotPwText: {
+    marginTop: Spaces.M,
+    color: AppColors.Grey,
   },
 });

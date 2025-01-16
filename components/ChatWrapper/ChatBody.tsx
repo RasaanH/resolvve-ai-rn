@@ -6,6 +6,7 @@ import { ChatModes, EmptyChat } from "./EmptyChat";
 import { InputToolbar, Send } from "react-native-gifted-chat";
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
+import { TypingIndicator } from "../TypingIndicator";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -32,16 +33,17 @@ const customtInputToolbar = (props: any) => {
   );
 };
 
-const renderSend = (props: any) => {
+const renderSend = (props: any, isTyping: boolean) => {
+  const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
   return (
-    <Send {...props}>
+    <Send disabled={isTyping} {...props}>
       <View
         style={{
           marginBottom: 5,
           marginRight: 5,
         }}
       >
-        <MaterialIcons size={25} color={AppColors.Black} name="send" />
+        <MaterialIcons size={25} color={iconColor} name="send" />
       </View>
     </Send>
   );
@@ -76,12 +78,17 @@ export const ChatBody = ({
     };
   }, []);
 
-  /**consider renderFooter to show a better loading indicator */
+  const renderingFooter = () => {
+    if (!isTyping) {
+      return <View style={{ display: "none" }}></View>;
+    }
+    return <TypingIndicator />;
+  };
 
   return (
     <GiftedChat
       messages={messageList}
-      isTyping={isTyping}
+      renderFooter={renderingFooter}
       placeholder="Message"
       alignTop={true}
       renderDay={() => null}
@@ -89,7 +96,7 @@ export const ChatBody = ({
         <EmptyChat keyboardHeight={keyboardHeight} send={send} mode={mode} />
       )}
       renderInputToolbar={(props) => customtInputToolbar(props)}
-      renderSend={(props) => renderSend(props)}
+      renderSend={(props) => renderSend(props, isTyping)}
       inverted={messageList.length !== 0}
       renderAvatarOnTop={true}
       renderTime={() => null}
@@ -110,12 +117,17 @@ export const ChatBody = ({
               },
               left: {
                 color: "white",
+                paddingTop: 0,
+                marginTop: 0,
               },
             }}
             wrapperStyle={{
               left: {
                 backgroundColor: "transparent",
-                padding: 5,
+                paddingLeft: 5,
+                paddingRight: 5,
+                paddingBottom: 5,
+                paddingTop: 0,
               },
               right: {
                 backgroundColor: AppColors.LightGrey,

@@ -32,6 +32,7 @@ export const validateSignUp = ({
   password,
   confirmPassword,
   email,
+  signUp,
 }: ValidatePasswordArgs): SignUpValidationObj => {
   const responseObj: SignUpValidationObj = {
     email: null,
@@ -47,7 +48,14 @@ export const validateSignUp = ({
     responseObj.confirmPassword = "Passwords do not match";
   }
   if (!isValidEmail(email)) {
-    responseObj.email = "invlaid email address";
+    responseObj.email = "Invlaid email address";
+  }
+  if (!signUp) {
+    return {
+      ...responseObj,
+      password: null,
+      confirmPassword: null,
+    };
   }
   return responseObj;
 };
