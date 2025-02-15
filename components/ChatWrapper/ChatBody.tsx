@@ -89,7 +89,9 @@ export const ChatBody = ({
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -keyboardHeight}
+      keyboardVerticalOffset={
+        Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 15
+      }
     >
       <GiftedChat
         messages={messageList}
@@ -109,7 +111,7 @@ export const ChatBody = ({
           contentContainerStyle: {
             flexGrow: 1,
             justifyContent: "flex-start",
-            paddingBottom: keyboardHeight,
+            paddingBottom: 0,
           },
         }}
         renderBubble={(props) => {
