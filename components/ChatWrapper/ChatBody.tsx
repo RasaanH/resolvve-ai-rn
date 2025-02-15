@@ -95,7 +95,7 @@ export const ChatBody = ({
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={
-        Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 15
+        Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 10
       }
     >
       <GiftedChat

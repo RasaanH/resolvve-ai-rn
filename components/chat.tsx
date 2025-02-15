@@ -76,7 +76,7 @@ export const Chat = () => {
       <Tabs
         style={{
           backgroundColor: AppColors.DarkGrey,
-          marginVertical: Spaces.S,
+          marginVertical: Spaces.Xs,
         }}
         tabLabelStyle={{
           color: "white",
