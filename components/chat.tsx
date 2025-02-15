@@ -80,7 +80,7 @@ export const Chat = () => {
         }}
         tabLabelStyle={{
           color: "white",
-          fontSize: 15,
+          fontSize: 16,
         }}
         tabHeaderStyle={{
           borderBottomColor: AppColors.White,
@@ -96,7 +96,7 @@ export const Chat = () => {
         mode="fixed"
         disableSwipe={true}
       >
-        <TabScreen label="MAGA" icon="elephant">
+        <TabScreen label="MAGA">
           <View style={styles.backgroundForChat}>
             {tabIndex === 0 && (
               <ChatBody
@@ -108,7 +108,7 @@ export const Chat = () => {
             )}
           </View>
         </TabScreen>
-        <TabScreen label="Liberal" icon="donkey">
+        <TabScreen label="Liberal">
           <View style={styles.backgroundForChat}>
             {tabIndex === 1 && (
               <ChatBody
