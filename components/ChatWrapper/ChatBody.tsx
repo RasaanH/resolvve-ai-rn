@@ -25,7 +25,8 @@ const customtInputToolbar = (props: any) => {
         backgroundColor: "white",
         borderTopColor: "#E8E8E8",
         borderTopWidth: 1,
-        padding: Spaces.S,
+        paddingHorizontal: Spaces.S,
+        paddingVertical: Spaces.Xs,
         borderRadius: 8,
         marginHorizontal: Spaces.M,
       }}
@@ -36,7 +37,11 @@ const customtInputToolbar = (props: any) => {
 const renderSend = (props: any, isTyping: boolean) => {
   const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
   return (
-    <Send disabled={isTyping} {...props}>
+    <Send
+      disabled={isTyping}
+      {...props}
+      containerStyle={{ borderWidth: 0, paddingBottom: Spaces.S }}
+    >
       <View
         style={{
           marginBottom: 5,
