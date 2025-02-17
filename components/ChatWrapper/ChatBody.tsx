@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Keyboard, View } from "react-native";
+import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
@@ -25,7 +25,8 @@ const customtInputToolbar = (props: any) => {
         backgroundColor: "white",
         borderTopColor: "#E8E8E8",
         borderTopWidth: 1,
-        padding: Spaces.S,
+        paddingHorizontal: Spaces.S,
+        paddingVertical: Spaces.Xs,
         borderRadius: 8,
         marginHorizontal: Spaces.M,
       }}
@@ -36,7 +37,11 @@ const customtInputToolbar = (props: any) => {
 const renderSend = (props: any, isTyping: boolean) => {
   const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
   return (
-    <Send disabled={isTyping} {...props}>
+    <Send
+      disabled={isTyping}
+      {...props}
+      containerStyle={{ borderWidth: 0, paddingBottom: Spaces.S }}
+    >
       <View
         style={{
           marginBottom: 5,
@@ -86,61 +91,69 @@ export const ChatBody = ({
   };
 
   return (
-    <GiftedChat
-      messages={messageList}
-      renderFooter={renderingFooter}
-      placeholder="Message"
-      alignTop={true}
-      renderDay={() => null}
-      renderChatEmpty={() => (
-        <EmptyChat keyboardHeight={keyboardHeight} send={send} mode={mode} />
-      )}
-      renderInputToolbar={(props) => customtInputToolbar(props)}
-      renderSend={(props) => renderSend(props, isTyping)}
-      inverted={messageList.length !== 0}
-      renderAvatarOnTop={true}
-      renderTime={() => null}
-      listViewProps={{
-        contentContainerStyle: {
-          flexGrow: 1,
-          justifyContent: "flex-start",
-          paddingBottom: keyboardHeight,
-        },
-      }}
-      renderBubble={(props) => {
-        return (
-          <Bubble
-            {...props}
-            textStyle={{
-              right: {
-                color: AppColors.Black,
-              },
-              left: {
-                color: "white",
-                paddingTop: 0,
-                marginTop: 0,
-              },
-            }}
-            wrapperStyle={{
-              left: {
-                backgroundColor: "transparent",
-                paddingLeft: 5,
-                paddingRight: 5,
-                paddingBottom: 5,
-                paddingTop: 0,
-              },
-              right: {
-                backgroundColor: AppColors.LightGrey,
-                padding: 5,
-              },
-            }}
-          />
-        );
-      }}
-      onSend={(messages) => send(messages)}
-      user={{
-        _id: 224687234,
-      }}
-    />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={
+        Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 10
+      }
+    >
+      <GiftedChat
+        messages={messageList}
+        renderFooter={renderingFooter}
+        placeholder="Message"
+        alignTop={true}
+        renderDay={() => null}
+        renderChatEmpty={() => (
+          <EmptyChat keyboardHeight={0} send={send} mode={mode} />
+        )}
+        renderInputToolbar={(props) => customtInputToolbar(props)}
+        renderSend={(props) => renderSend(props, isTyping)}
+        inverted={messageList.length !== 0}
+        renderAvatarOnTop={true}
+        renderTime={() => null}
+        listViewProps={{
+          contentContainerStyle: {
+            flexGrow: 1,
+            justifyContent: "flex-start",
+            paddingBottom: 0,
+          },
+        }}
+        renderBubble={(props) => {
+          return (
+            <Bubble
+              {...props}
+              textStyle={{
+                right: {
+                  color: AppColors.Black,
+                },
+                left: {
+                  color: "white",
+                  paddingTop: 0,
+                  marginTop: 0,
+                },
+              }}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: "transparent",
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  paddingBottom: 5,
+                  paddingTop: 0,
+                },
+                right: {
+                  backgroundColor: AppColors.LightGrey,
+                  padding: 5,
+                },
+              }}
+            />
+          );
+        }}
+        onSend={(messages) => send(messages)}
+        user={{
+          _id: 224687234,
+        }}
+      />
+    </KeyboardAvoidingView>
   );
 };

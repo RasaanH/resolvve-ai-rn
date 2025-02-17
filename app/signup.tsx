@@ -13,7 +13,8 @@ import { validateSignUp } from "@/utility-functions/utils";
 import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
 import { Spaces } from "@/constants/Spacing";
-
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +31,26 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] =
     useState<SignUpValidationObj>(defaultErrorMessage);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const clearForm = () => {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setErrorSnackMessage("");
+    setErrorSnackbarVisible(false);
+    setSignUpMode(true);
+    setErrorMessage(defaultErrorMessage);
+  };
+
+  useFocusEffect(
+    // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
+    useCallback(() => {
+      // Return function is invoked whenever the route gets out of focus.
+      return () => {
+        clearForm();
+      };
+    }, [])
+  );
 
   const showSnackbar = () => {
     setSnackBarVisible(true);

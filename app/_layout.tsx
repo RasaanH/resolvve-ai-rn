@@ -42,7 +42,6 @@ export default function RootLayout() {
           options={{
             drawerLabel: "Reset Chat",
             title: "Reset Chat",
-            unmountOnBlur: true,
             headerLeft: () => (
               <IconButton
                 icon="keyboard-backspace"
@@ -62,14 +61,12 @@ export default function RootLayout() {
             headerLeft: () => <DrawerToggleButton />,
             swipeEdgeWidth: 0,
             drawerItemStyle: { display: "none" },
-            unmountOnBlur: true,
           }}
         />
         <Drawer.Screen
           name="subscription"
           options={{
             drawerLabel: "Subscription",
-            unmountOnBlur: true,
             title: "Subscription",
             headerLeft: () => (
               <IconButton
@@ -100,7 +97,6 @@ export default function RootLayout() {
           name="signup"
           options={{
             drawerLabel: authPageName,
-            unmountOnBlur: true,
             title: "Authentication",
             headerLeft: () => (
               <IconButton
