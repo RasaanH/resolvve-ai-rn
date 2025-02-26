@@ -1,4 +1,10 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
+import { Platform } from "react-native";
+import Purchases from "react-native-purchases";
+import {
+  public_google_play_key,
+  public_apple_key,
+} from "@/constants/purchases";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 // @ts-ignore
 import { User } from "firebase/auth";
@@ -8,10 +14,29 @@ export const AuthContext = createContext({});
 
 export const AuthProvider = (props: any) => {
   const [user, setUser] = useState<User>();
+  useEffect(() => {
+    Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+    if (Platform.OS === "ios") {
+      Purchases.configure({ apiKey: public_apple_key });
+    }
+    if (Platform.OS === "android") {
+      Purchases.configure({ apiKey: public_google_play_key });
+    }
+  }, [user]);
+
   const auth = getAuth(app);
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       setUser(user);
+      if (!user.isAnonymous) {
+        try {
+          console.log("about to log into purchases, userid", user.uid);
+          const { customerInfo, created } = await Purchases.logIn(user.uid);
+          console.log(JSON.stringify({ customerInfo, created }));
+        } catch (err) {
+          console.log("error logging in to purchases", err);
+        }
+      }
     } else {
       setUser(undefined);
     }

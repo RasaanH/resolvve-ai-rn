@@ -1,4 +1,5 @@
 import { PaperProvider } from "react-native-paper";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { Drawer } from "expo-router/drawer";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { router } from "expo-router";
@@ -30,85 +31,87 @@ export default function RootLayout() {
   });
   return (
     <PaperProvider>
-      <Drawer
-        screenOptions={{
-          drawerStyle: {},
-          drawerLabelStyle: { fontSize: 16 },
-          headerShown: true,
-        }}
-      >
-        <Drawer.Screen
-          name="redirecthome"
-          options={{
-            drawerLabel: "Reset Chat",
-            title: "Reset Chat",
-            headerLeft: () => (
-              <IconButton
-                icon="keyboard-backspace"
-                size={25}
-                iconColor="black"
-                onPress={() => router.navigate("/")}
-              />
-            ),
-            swipeEdgeWidth: 0,
+      <AuthProvider>
+        <Drawer
+          screenOptions={{
+            drawerStyle: {},
+            drawerLabelStyle: { fontSize: 16 },
+            headerShown: true,
           }}
-        />
-        <Drawer.Screen
-          name="index"
-          options={{
-            drawerLabel: "Balance GPT",
-            title: "BalanceGPT",
-            headerLeft: () => <DrawerToggleButton />,
-            swipeEdgeWidth: 0,
-            drawerItemStyle: { display: "none" },
-          }}
-        />
-        <Drawer.Screen
-          name="subscription"
-          options={{
-            drawerLabel: "Subscription",
-            title: "Subscription",
-            headerLeft: () => (
-              <IconButton
-                icon="keyboard-backspace"
-                size={25}
-                iconColor="black"
-                onPress={() => router.navigate("/")}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="about"
-          options={{
-            drawerLabel: "About",
-            title: "About",
-            headerLeft: () => (
-              <IconButton
-                icon="keyboard-backspace"
-                size={25}
-                iconColor="black"
-                onPress={() => router.navigate("/")}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="signup"
-          options={{
-            drawerLabel: authPageName,
-            title: "Authentication",
-            headerLeft: () => (
-              <IconButton
-                icon="keyboard-backspace"
-                size={25}
-                iconColor="black"
-                onPress={() => router.navigate("/")}
-              />
-            ),
-          }}
-        />
-      </Drawer>
+        >
+          <Drawer.Screen
+            name="redirecthome"
+            options={{
+              drawerLabel: "Reset Chat",
+              title: "Reset Chat",
+              headerLeft: () => (
+                <IconButton
+                  icon="keyboard-backspace"
+                  size={25}
+                  iconColor="black"
+                  onPress={() => router.navigate("/")}
+                />
+              ),
+              swipeEdgeWidth: 0,
+            }}
+          />
+          <Drawer.Screen
+            name="index"
+            options={{
+              drawerLabel: "Balance GPT",
+              title: "BalanceGPT",
+              headerLeft: () => <DrawerToggleButton />,
+              swipeEdgeWidth: 0,
+              drawerItemStyle: { display: "none" },
+            }}
+          />
+          <Drawer.Screen
+            name="subscription"
+            options={{
+              drawerLabel: "Subscription",
+              title: "Subscription",
+              headerLeft: () => (
+                <IconButton
+                  icon="keyboard-backspace"
+                  size={25}
+                  iconColor="black"
+                  onPress={() => router.navigate("/")}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="about"
+            options={{
+              drawerLabel: "About",
+              title: "About",
+              headerLeft: () => (
+                <IconButton
+                  icon="keyboard-backspace"
+                  size={25}
+                  iconColor="black"
+                  onPress={() => router.navigate("/")}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="signup"
+            options={{
+              drawerLabel: authPageName,
+              title: "Authentication",
+              headerLeft: () => (
+                <IconButton
+                  icon="keyboard-backspace"
+                  size={25}
+                  iconColor="black"
+                  onPress={() => router.navigate("/")}
+                />
+              ),
+            }}
+          />
+        </Drawer>
+      </AuthProvider>
     </PaperProvider>
   );
 }
