@@ -45,6 +45,9 @@ export default function SignUp() {
   useFocusEffect(
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
+      if (auth.currentUser?.isAnonymous === false) {
+        signOut(auth);
+      }
       // Return function is invoked whenever the route gets out of focus.
       return () => {
         clearForm();
@@ -88,11 +91,6 @@ export default function SignUp() {
       showErrorSnackbar((err as any)?.code || "");
     }
   };
-  useEffect(() => {
-    if (auth.currentUser?.isAnonymous === false) {
-      signOut(auth);
-    }
-  }, []);
 
   const swapButtonText = signUpMode ? "Login" : "Sign Up";
 
