@@ -22,7 +22,7 @@ export const AuthProvider = (props: any) => {
     if (Platform.OS === "android") {
       Purchases.configure({ apiKey: public_google_play_key });
     }
-  }, [user]);
+  }, []);
 
   const auth = getAuth(app);
   onAuthStateChanged(auth, async (user) => {
@@ -30,15 +30,20 @@ export const AuthProvider = (props: any) => {
       setUser(user);
       if (!user.isAnonymous) {
         try {
-          console.log("about to log into purchases, userid", user.uid);
-          const { customerInfo, created } = await Purchases.logIn(user.uid);
-          console.log(JSON.stringify({ customerInfo, created }));
+          await Purchases.logIn(user.uid);
+          console.info("successful login");
         } catch (err) {
           console.log("error logging in to purchases", err);
         }
       }
     } else {
       setUser(undefined);
+      try {
+        await Purchases.logOut();
+        console.info("successful logout");
+      } catch (err) {
+        console.log("error logging out of purchases", err);
+      }
     }
   });
   return (
