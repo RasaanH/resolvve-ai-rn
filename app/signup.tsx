@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
 import {
@@ -14,7 +14,6 @@ import { Text } from "react-native-paper";
 import { SignUpValidationObj } from "@/constants/Types";
 import { Spaces } from "@/constants/Spacing";
 import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +44,9 @@ export default function SignUp() {
   useFocusEffect(
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
+      if (auth.currentUser?.isAnonymous === false) {
+        signOut(auth);
+      }
       // Return function is invoked whenever the route gets out of focus.
       return () => {
         clearForm();
@@ -88,11 +90,6 @@ export default function SignUp() {
       showErrorSnackbar((err as any)?.code || "");
     }
   };
-  useEffect(() => {
-    if (auth.currentUser?.isAnonymous === false) {
-      signOut(auth);
-    }
-  }, []);
 
   const swapButtonText = signUpMode ? "Login" : "Sign Up";
 

@@ -3,7 +3,8 @@ import { router } from "expo-router";
 import { Button } from "react-native-paper";
 import { View, StyleSheet, Keyboard } from "react-native";
 import { defaultMessage } from "@/constants/MockData";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
+import { useFocusEffect } from "expo-router";
 import { IMessage } from "react-native-gifted-chat";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
@@ -31,6 +32,16 @@ export const Chat = () => {
   const chatService = httpsCallable<any, ChatServiceResponse>(
     functions,
     "chatService"
+  );
+
+  useFocusEffect(
+    // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
+    useCallback(() => {
+      setMessageList(defaultMessage);
+      thread_id.current = "";
+      // Return function is invoked whenever the route gets out of focus.
+      return () => {};
+    }, [])
   );
 
   const send = async (messages: IMessage[]) => {
