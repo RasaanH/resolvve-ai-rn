@@ -40,7 +40,7 @@ export const validateSignUp = ({
     confirmPassword: null,
   };
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isValidEmail = (email: string) => emailRegex.test(email);
+  const isValidEmail = (email: string) => emailRegex.test(email.trim());
   if (password.length < 8) {
     responseObj.password = "Password must be at least 8 characters long";
   }
