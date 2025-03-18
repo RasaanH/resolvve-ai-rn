@@ -27,7 +27,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="com.rasaanorg.balancegpt"/>
-        <data android:scheme="exp+resolvve-ai-rn"/>
+        <data android:scheme="exp+balancegpt"/>
       </intent-filter>
     </activity>
   </application>
