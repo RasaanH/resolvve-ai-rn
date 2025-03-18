@@ -27,6 +27,7 @@ export const Chat = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const thread_id = useRef("");
+  const tabRef = useRef(0);
 
   const functions = getFunctions();
   const chatService = httpsCallable<any, ChatServiceResponse>(
@@ -45,6 +46,7 @@ export const Chat = () => {
   );
 
   const send = async (messages: IMessage[]) => {
+    const originalTabRef = Number(tabRef.current);
     const newMessages = [...messages, ...messageList];
     setMessageList([...newMessages]);
     const newMessage = newMessages[0];
@@ -64,6 +66,10 @@ export const Chat = () => {
       if (messages.length === 0 && threadId === "") {
         return router.navigate("/subscription");
       }
+      if (originalTabRef !== tabRef.current) {
+        console.log("user changed tabs before response, ending early");
+        return;
+      }
       thread_id.current = threadId;
       console.log("data from response", JSON.stringify({ messages, threadId }));
       const newMessages = openAiToUiMessages(messages);
@@ -78,6 +84,8 @@ export const Chat = () => {
     setMessageList(defaultMessage);
     thread_id.current = "";
     setTabIndex(index);
+    tabRef.current = index;
+    setIsTyping(false);
   };
 
   const mode = tabIndex === 0 ? ChatModes.conservative : ChatModes.liberal;
