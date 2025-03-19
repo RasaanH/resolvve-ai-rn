@@ -49,8 +49,9 @@ export const AuthProvider = (props: any) => {
         }
         return;
       }
-      if (true) {
-        // do we need if condition?
+      const appUserId = await Purchases.getAppUserID();
+      const includesAnonymous = /rcanonymousid/i;
+      if (includesAnonymous.test(appUserId) === false) {
         try {
           await debouncedLogout();
         } catch (err) {
