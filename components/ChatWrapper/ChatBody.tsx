@@ -65,6 +65,10 @@ export const ChatBody = ({
 }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [modalButtonText, setModalButtonText] = useState("Sign In");
+  const anonBodyMessage =
+    "Sign in and subscribe to BalanceGPT Plus to continue";
+  const signedInBodyMessage = "Subscribe to BalanceGPT Plus to continue";
+  const [modalBodyText, setModalBodyText] = useState(anonBodyMessage);
   const [visible, setVisible] = useState(true);
 
   const showModal = () => setVisible(true);
@@ -73,9 +77,9 @@ export const ChatBody = ({
     backgroundColor: "white",
     padding: 20,
     margin: 20,
-    height: "40%",
     borderRadius: Spaces.M,
     justifyContent: "space-between",
+    gap: 26,
   };
 
   useEffect(() => {
@@ -115,9 +119,12 @@ export const ChatBody = ({
   const auth = getAuth();
   const user = auth.currentUser;
 
-  if (user?.isAnonymous === false) {
-    setModalButtonText("Subscribe");
-  }
+  useEffect(() => {
+    if (user?.isAnonymous === false) {
+      setModalButtonText("Subscribe");
+      setModalBodyText(signedInBodyMessage);
+    }
+  }, [user]);
 
   return (
     <KeyboardAvoidingView
@@ -134,10 +141,16 @@ export const ChatBody = ({
           dismissable={true}
           contentContainerStyle={containerStyle}
         >
-          <Text>Example Modal. Click outside this area to dismiss.</Text>
+          <Text variant="headlineSmall">Max free usage reached</Text>
+          <Text variant="bodyLarge">{modalBodyText}.</Text>
           <Button
             buttonColor={AppColors.PaywallBlue}
             mode="contained"
+            style={{
+              borderRadius: Spaces.M,
+              paddingVertical: Spaces.Xs,
+              paddingHorizontal: Spaces.M,
+            }}
             onPress={handleModalButtonPress}
           >
             {modalButtonText}
