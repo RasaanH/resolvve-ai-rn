@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { useCallback } from "react";
 import { useFocusEffect } from "expo-router";
+import { getAuth } from "firebase/auth";
 import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
 
 const presentPaywallIfNeeded = async () => {
@@ -40,9 +41,14 @@ export default function Subscription() {
   useFocusEffect(
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user?.isAnonymous) {
+        router.navigate("/signup");
+        return;
+      }
       presentPaywall();
       router.navigate("/");
-
       return () => {};
     }, [])
   );
