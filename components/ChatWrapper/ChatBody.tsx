@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
+import { router } from "expo-router";
 import { AppColors } from "@/constants/Colors";
+import { Button, Portal, Modal, Text } from "react-native-paper";
+import { getAuth } from "firebase/auth";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
 import { InputToolbar, Send } from "react-native-gifted-chat";
@@ -61,6 +64,19 @@ export const ChatBody = ({
   isTyping,
 }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [modalButtonText, setModalButtonText] = useState("Sign In");
+  const [visible, setVisible] = useState(true);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 20,
+    margin: 20,
+    height: "40%",
+    borderRadius: Spaces.M,
+    justifyContent: "space-between",
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -90,6 +106,19 @@ export const ChatBody = ({
     return <TypingIndicator />;
   };
 
+  const handleModalButtonPress = () => {
+    const route = modalButtonText === "Sign In" ? "/signup" : "/subscription";
+    hideModal();
+    router.navigate(route);
+  };
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user?.isAnonymous === false) {
+    setModalButtonText("Subscribe");
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -98,6 +127,23 @@ export const ChatBody = ({
         Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 10
       }
     >
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          dismissable={true}
+          contentContainerStyle={containerStyle}
+        >
+          <Text>Example Modal. Click outside this area to dismiss.</Text>
+          <Button
+            buttonColor={AppColors.PaywallBlue}
+            mode="contained"
+            onPress={handleModalButtonPress}
+          >
+            {modalButtonText}
+          </Button>
+        </Modal>
+      </Portal>
       <GiftedChat
         messages={messageList}
         renderFooter={renderingFooter}

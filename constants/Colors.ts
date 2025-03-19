@@ -33,5 +33,6 @@ export enum AppColors {
   White = "#fff",
   Black = "#000",
   ConservativeRed = "#E81B23",
+  PaywallBlue = "#090979",
   LiberalBlue = "#0055A4",
 }
