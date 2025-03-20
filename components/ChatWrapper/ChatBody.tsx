@@ -16,6 +16,7 @@ import {
   MessageText,
 } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
+import Markdown from "react-native-markdown-display";
 
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -130,31 +131,46 @@ export const ChatBody = ({
         )}
         renderMessageText={(props) => {
           const {
-            currentMessage: { text },
+            currentMessage: { text, system, user },
           } = props;
-          const isHTML = (str: string) => /<\/?[a-z][\s\S]*>/i.test(str);
-          console.log({ text, isHtmlText: isHTML(text) });
-          if (!isHTML(text)) {
+
+          console.log({ text, user });
+          if (user._id === 224687234) {
             // or if user message
             return (
               <MessageText customTextStyle={{ fontSize: 16 }} {...props} />
             );
           }
-          const source = { html: text };
           return (
-            <RenderHtml
-              baseStyle={{
-                color: "white",
-                paddingHorizontal: Spaces.L,
-                // backgroundColor: "green",
-                fontSize: 16,
-                justifyContent: "flex-start",
-                alignItems: "flex-start",
+            <Markdown
+              style={{
+                body: {
+                  // color: "white",
+                  fontSize: 16,
+                  // backgroundColor: "green",
+                },
+                paragraph: { marginTop: 5, color: "white" },
+                code_inline: {
+                  color: "black",
+                },
+                bullet_list: { color: "white" },
+                ordered_list: {
+                  color: "white",
+                },
+                heading3: { color: "white" },
+                heading4: { color: "white" },
+                heading5: { color: "white" },
+                heading6: { color: "white" },
+                heading2: { color: "white" },
+                heading1: { color: "white" },
+                table: { color: "white" },
+                blockquote: {
+                  color: "black", // still doesn't work for some reason
+                },
               }}
-              tagsStyles={{ p: { marginVertical: 0 } }}
-              contentWidth={width}
-              source={source}
-            />
+            >
+              {text}
+            </Markdown>
           );
         }}
         renderInputToolbar={(props) => customtInputToolbar(props)}
