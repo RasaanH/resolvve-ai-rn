@@ -33,6 +33,7 @@ const customtInputToolbar = (props: any) => {
         backgroundColor: "white",
         borderTopColor: "#E8E8E8",
         borderTopWidth: 1,
+        marginTop: 5,
         paddingHorizontal: Spaces.S,
         paddingVertical: Spaces.Xs,
         borderRadius: 8,
