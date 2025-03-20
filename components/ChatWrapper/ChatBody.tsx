@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
 import { AppColors } from "@/constants/Colors";
-import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  Bubble,
+  IMessage,
+  InputToolbar,
+  Send,
+  MessageText,
+} from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
-import { InputToolbar, Send } from "react-native-gifted-chat";
+import Markdown from "react-native-markdown-display";
+
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TypingIndicator } from "../TypingIndicator";
@@ -25,6 +33,7 @@ const customtInputToolbar = (props: any) => {
         backgroundColor: "white",
         borderTopColor: "#E8E8E8",
         borderTopWidth: 1,
+        marginTop: 5,
         paddingHorizontal: Spaces.S,
         paddingVertical: Spaces.Xs,
         borderRadius: 8,
@@ -108,6 +117,54 @@ export const ChatBody = ({
         renderChatEmpty={() => (
           <EmptyChat keyboardHeight={0} send={send} mode={mode} />
         )}
+        renderMessageText={(props) => {
+          const {
+            currentMessage: { text, system, user },
+          } = props;
+
+          console.log({ text, user });
+          if (user._id === 224687234) {
+            // or if user message
+            return (
+              <MessageText customTextStyle={{ fontSize: 16 }} {...props} />
+            );
+          }
+          return (
+            <Markdown
+              style={{
+                body: {
+                  // color: "white",
+                  fontSize: 16,
+                  lineHeight: 22,
+                  // backgroundColor: "green",
+                  padding: 5,
+                  paddingTop: 0,
+                },
+                paragraph: { marginTop: 0, marginBottom: 2, color: "white" },
+                code_inline: {
+                  color: "black",
+                },
+                bullet_list: { color: "white" },
+                ordered_list: {
+                  color: "white",
+                },
+                heading3: { color: "white" },
+                heading4: { color: "white" },
+                heading5: { color: "white" },
+                heading6: { color: "white" },
+                heading2: { color: "white" },
+                heading1: { color: "white" },
+                table: { color: "white" },
+                blockquote: {
+                  backgroundColor: "#2D2D2D",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              {text}
+            </Markdown>
+          );
+        }}
         renderInputToolbar={(props) => customtInputToolbar(props)}
         renderSend={(props) => renderSend(props, isTyping)}
         inverted={messageList.length !== 0}
@@ -135,14 +192,16 @@ export const ChatBody = ({
               wrapperStyle={{
                 left: {
                   backgroundColor: "transparent",
+                  // backgroundColor: "purple",
                   paddingLeft: 5,
                   paddingRight: 5,
                   paddingBottom: 5,
-                  paddingTop: 0,
+                  paddingTop: 3,
                 },
                 right: {
                   backgroundColor: AppColors.LightGrey,
                   padding: 5,
+                  marginBottom: 1,
                 },
               }}
             />
