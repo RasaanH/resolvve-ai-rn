@@ -136,8 +136,10 @@ export const ChatBody = ({
                   fontSize: 16,
                   lineHeight: 22,
                   // backgroundColor: "green",
+                  padding: 5,
+                  paddingTop: 0,
                 },
-                paragraph: { marginTop: 2, marginBottom: 2, color: "white" },
+                paragraph: { marginTop: 0, marginBottom: 2, color: "white" },
                 code_inline: {
                   color: "black",
                 },
@@ -189,15 +191,16 @@ export const ChatBody = ({
               wrapperStyle={{
                 left: {
                   backgroundColor: "transparent",
+                  // backgroundColor: "purple",
                   paddingLeft: 5,
                   paddingRight: 5,
                   paddingBottom: 5,
-                  paddingTop: 1,
+                  paddingTop: 3,
                 },
                 right: {
                   backgroundColor: AppColors.LightGrey,
                   padding: 5,
-                  marginBottom: 4,
+                  marginBottom: 1,
                 },
               }}
             />
