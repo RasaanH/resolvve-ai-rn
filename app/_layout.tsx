@@ -59,7 +59,7 @@ export default function RootLayout() {
             name="index"
             options={{
               drawerLabel: "Balance GPT",
-              title: "BalanceGPT",
+              title: "Balance GPT",
               headerLeft: () => <DrawerToggleButton />,
               swipeEdgeWidth: 0,
               drawerItemStyle: { display: "none" },
@@ -68,8 +68,8 @@ export default function RootLayout() {
           <Drawer.Screen
             name="subscription"
             options={{
-              drawerLabel: "Subscription",
-              title: "Subscription",
+              drawerLabel: "Plus Subscription",
+              title: "Balance GPT Plus",
               headerLeft: () => (
                 <IconButton
                   icon="keyboard-backspace"

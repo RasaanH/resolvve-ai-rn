@@ -29,8 +29,8 @@ export const Chat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [modalButtonText, setModalButtonText] = useState("Sign In");
   const anonBodyMessage =
-    "Sign in and subscribe to BalanceGPT Plus to continue.";
-  const signedInBodyMessage = "Subscribe to BalanceGPT Plus to continue.";
+    "Sign in and subscribe to Balance GPT Plus to continue.";
+  const signedInBodyMessage = "Subscribe to Balance GPT Plus to continue.";
   const [modalBodyText, setModalBodyText] = useState(anonBodyMessage);
   const [visible, setVisible] = useState(false);
 
