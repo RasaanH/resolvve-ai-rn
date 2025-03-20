@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Keyboard,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  useWindowDimensions,
-} from "react-native";
+import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import {
   GiftedChat,
@@ -21,8 +15,6 @@ import Markdown from "react-native-markdown-display";
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TypingIndicator } from "../TypingIndicator";
-
-import RenderHtml from "react-native-render-html";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -78,9 +70,6 @@ export const ChatBody = ({
 }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  const sampleString =
-    'You can make a div blue by using CSS. Here\'s a simple example:\n\n```html\n<div style="background-color: blue; width: 100px; height: 100px;"></div>\n```\n\nThis code creates a blue div that\'s 100x100 pixels. You can adjust the width and height as needed. If you’re using an external stylesheet, you might write it like this:\n\n```css\n.blue-div {\n    background-color: blue;\n    width: 100px;\n    height: 100px;\n}\n```\n\nAnd in your HTML:\n\n```html\n<div class="blue-div"></div>\n```\n\nLet me know if you need more help!';
-
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -108,8 +97,6 @@ export const ChatBody = ({
     }
     return <TypingIndicator />;
   };
-
-  const { width } = useWindowDimensions();
 
   return (
     <KeyboardAvoidingView
@@ -165,7 +152,8 @@ export const ChatBody = ({
                 heading1: { color: "white" },
                 table: { color: "white" },
                 blockquote: {
-                  color: "black", // still doesn't work for some reason
+                  backgroundColor: "#2D2D2D",
+                  borderRadius: 3,
                 },
               }}
             >
