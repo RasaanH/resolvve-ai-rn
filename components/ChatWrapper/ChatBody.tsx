@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
-import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  Keyboard,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 import { AppColors } from "@/constants/Colors";
-import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  Bubble,
+  IMessage,
+  InputToolbar,
+  Send,
+  MessageText,
+} from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
-import { InputToolbar, Send } from "react-native-gifted-chat";
+
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TypingIndicator } from "../TypingIndicator";
+
+import RenderHtml from "react-native-render-html";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -62,6 +77,9 @@ export const ChatBody = ({
 }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
+  const sampleString =
+    'You can make a div blue by using CSS. Here\'s a simple example:\n\n```html\n<div style="background-color: blue; width: 100px; height: 100px;"></div>\n```\n\nThis code creates a blue div that\'s 100x100 pixels. You can adjust the width and height as needed. If you’re using an external stylesheet, you might write it like this:\n\n```css\n.blue-div {\n    background-color: blue;\n    width: 100px;\n    height: 100px;\n}\n```\n\nAnd in your HTML:\n\n```html\n<div class="blue-div"></div>\n```\n\nLet me know if you need more help!';
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -90,6 +108,8 @@ export const ChatBody = ({
     return <TypingIndicator />;
   };
 
+  const { width } = useWindowDimensions();
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -108,6 +128,35 @@ export const ChatBody = ({
         renderChatEmpty={() => (
           <EmptyChat keyboardHeight={0} send={send} mode={mode} />
         )}
+        renderMessageText={(props) => {
+          const {
+            currentMessage: { text },
+          } = props;
+          const isHTML = (str: string) => /<\/?[a-z][\s\S]*>/i.test(str);
+          console.log({ text, isHtmlText: isHTML(text) });
+          if (!isHTML(text)) {
+            // or if user message
+            return (
+              <MessageText customTextStyle={{ fontSize: 16 }} {...props} />
+            );
+          }
+          const source = { html: text };
+          return (
+            <RenderHtml
+              baseStyle={{
+                color: "white",
+                paddingHorizontal: Spaces.L,
+                // backgroundColor: "green",
+                fontSize: 16,
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}
+              tagsStyles={{ p: { marginVertical: 0 } }}
+              contentWidth={width}
+              source={source}
+            />
+          );
+        }}
         renderInputToolbar={(props) => customtInputToolbar(props)}
         renderSend={(props) => renderSend(props, isTyping)}
         inverted={messageList.length !== 0}
