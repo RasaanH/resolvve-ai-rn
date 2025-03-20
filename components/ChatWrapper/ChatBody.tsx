@@ -136,7 +136,7 @@ export const ChatBody = ({
                   fontSize: 16,
                   // backgroundColor: "green",
                 },
-                paragraph: { marginTop: 5, color: "white" },
+                paragraph: { marginTop: 2, marginBottom: 2, color: "white" },
                 code_inline: {
                   color: "black",
                 },
@@ -191,7 +191,7 @@ export const ChatBody = ({
                   paddingLeft: 5,
                   paddingRight: 5,
                   paddingBottom: 5,
-                  paddingTop: 0,
+                  paddingTop: 5,
                 },
                 right: {
                   backgroundColor: AppColors.LightGrey,
