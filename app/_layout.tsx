@@ -81,10 +81,10 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
-            name="about"
+            name="privacy"
             options={{
-              drawerLabel: "About",
-              title: "About",
+              drawerLabel: "Privacy",
+              title: "Privacy",
               headerLeft: () => (
                 <IconButton
                   icon="keyboard-backspace"
