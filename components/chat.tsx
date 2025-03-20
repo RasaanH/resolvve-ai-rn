@@ -19,10 +19,6 @@ import {
 } from "@/utility-functions/utils";
 import { ChatServiceResponse } from "@/constants/Types";
 
-const navigateToAbout = () => {
-  router.navigate("/about");
-};
-
 export const Chat = () => {
   const [messageList, setMessageList] = useState(defaultMessage);
   const [tabIndex, setTabIndex] = useState(0);
@@ -199,9 +195,6 @@ export const Chat = () => {
           </View>
         </TabScreen>
       </Tabs>
-      <Button style={{ display: "none" }} onPress={() => navigateToAbout()}>
-        To About
-      </Button>
     </TabsProvider>
   );
 };
