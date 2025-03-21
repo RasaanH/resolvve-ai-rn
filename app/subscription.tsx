@@ -1,4 +1,7 @@
-import { View } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
+import { AppColors } from "@/constants/Colors";
+import { Spaces } from "@/constants/Spacing";
+import { Button } from "react-native-paper";
 import { router } from "expo-router";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -68,5 +71,50 @@ export default function Subscription() {
     }, [])
   );
 
-  return <View></View>;
+  return (
+    <View style={styles.container}>
+      {/* <Image
+        style={styles.image}
+        source={require("../assets/images/Paywall.png")}
+      /> */}
+      <Button
+        style={styles.button}
+        labelStyle={styles.buttonContent}
+        textColor={AppColors.White}
+        buttonColor={AppColors.DarkNavy}
+        mode="elevated"
+      >
+        Fake button
+      </Button>
+      <Button
+        style={styles.button}
+        labelStyle={styles.buttonContent}
+        textColor={AppColors.White}
+        buttonColor={AppColors.Danger}
+        mode="elevated"
+      >
+        Cancel Subscription
+      </Button>
+    </View>
+  );
 }
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "space-between",
+    flex: 1,
+  },
+  image: {
+    resizeMode: "contain",
+    width: "80%",
+    marginBottom: Spaces.M,
+  },
+  button: {
+    margin: Spaces.M,
+    borderRadius: Spaces.S,
+    padding: Spaces.S,
+    zIndex: 500,
+  },
+  buttonContent: {
+    fontSize: 16,
+  },
+});
