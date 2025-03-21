@@ -1,9 +1,10 @@
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet, Linking } from "react-native";
+import { balanceGptPrivacyLink } from "@/constants/generalConstants";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
 import { Button, Text } from "react-native-paper";
 import { router } from "expo-router";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useRef } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useFocusEffect } from "expo-router";
 import { getAuth } from "firebase/auth";
@@ -43,12 +44,20 @@ const presentPaywall = async () => {
 
 export default function Subscription() {
   const context = useContext(AuthContext);
+  const openLink = () => {
+    const url = managementUrlRef.current || balanceGptPrivacyLink;
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred", err)
+    );
+    router.navigate("/");
+  };
+  const managementUrlRef = useRef("");
   useFocusEffect(
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
       const auth = getAuth();
-      console.log({ context });
       const managementUrl = context?.purchasesCustomerInfo?.managementUrl || "";
+      managementUrlRef.current = managementUrl;
       const activeSubscriptions =
         context?.purchasesCustomerInfo?.activeSubscriptions || [];
       console.log({
@@ -97,6 +106,7 @@ export default function Subscription() {
           textColor={AppColors.White}
           buttonColor={AppColors.Danger}
           mode="elevated"
+          onPress={openLink}
         >
           Cancel Subscription
         </Button>
