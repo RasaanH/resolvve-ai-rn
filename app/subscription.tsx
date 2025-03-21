@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import { router } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
 import { useFocusEffect } from "expo-router";
 import { getAuth } from "firebase/auth";
 import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
@@ -38,10 +39,19 @@ const presentPaywall = async () => {
 };
 
 export default function Subscription() {
+  const context = useContext(AuthContext);
   useFocusEffect(
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
       const auth = getAuth();
+      console.log({ context });
+      const managementUrl = context?.purchasesCustomerInfo?.managementUrl || "";
+      const activeSubscriptions =
+        context?.purchasesCustomerInfo?.activeSubscriptions || [];
+      console.log({
+        managementUrl,
+        activeSubscriptions,
+      });
       const user = auth.currentUser;
       if (user?.isAnonymous) {
         router.navigate("/signup");
