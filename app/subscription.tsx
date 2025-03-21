@@ -1,7 +1,7 @@
 import { View, Image, StyleSheet } from "react-native";
 import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { router } from "expo-router";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -73,28 +73,34 @@ export default function Subscription() {
 
   return (
     <View style={styles.container}>
-      {/* <Image
-        style={styles.image}
-        source={require("../assets/images/Paywall.png")}
-      /> */}
-      <Button
-        style={styles.button}
-        labelStyle={styles.buttonContent}
-        textColor={AppColors.White}
-        buttonColor={AppColors.DarkNavy}
-        mode="elevated"
-      >
-        Fake button
-      </Button>
-      <Button
-        style={styles.button}
-        labelStyle={styles.buttonContent}
-        textColor={AppColors.White}
-        buttonColor={AppColors.Danger}
-        mode="elevated"
-      >
-        Cancel Subscription
-      </Button>
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          source={require("../assets/images/Paywall.png")}
+        />
+      </View>
+      <View style={styles.bottomPortion}>
+        <View style={styles.textContainer}>
+          <Text style={styles.headerText} variant="headlineSmall">
+            You are currently subscribed!
+          </Text>
+          <Text variant="bodyLarge">
+            If you would like to cancel your subscription, push the button
+            below. You will retain Plus benefits until the end of the pay
+            period.
+          </Text>
+        </View>
+
+        <Button
+          style={styles.button}
+          labelStyle={styles.buttonContent}
+          textColor={AppColors.White}
+          buttonColor={AppColors.Danger}
+          mode="elevated"
+        >
+          Cancel Subscription
+        </Button>
+      </View>
     </View>
   );
 }
@@ -104,17 +110,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    resizeMode: "contain",
-    width: "80%",
-    marginBottom: Spaces.M,
+    resizeMode: "cover",
+    width: "100%",
+    height: "100%",
+  },
+  imageContainer: {
+    flex: 1.5,
+  },
+  textContainer: {
+    justifyContent: "space-between",
   },
   button: {
-    margin: Spaces.M,
     borderRadius: Spaces.S,
     padding: Spaces.S,
     zIndex: 500,
   },
   buttonContent: {
     fontSize: 16,
+  },
+  headerText: {
+    fontWeight: 700,
+    marginBottom: Spaces.M,
+  },
+  bottomPortion: {
+    justifyContent: "space-between",
+    margin: Spaces.L,
+    marginTop: Spaces.Xs,
+    flex: 1,
   },
 });
