@@ -57,6 +57,11 @@ export default function Subscription() {
         router.navigate("/signup");
         return;
       }
+      if (activeSubscriptions.length > 0) {
+        // later if we have more sub products we could check the specific entitlement
+        console.log("has active plus subscription");
+        return;
+      }
       presentPaywall();
       router.navigate("/");
       return () => {};
