@@ -44,6 +44,7 @@ const presentPaywall = async () => {
 
 export default function Subscription() {
   const context = useContext(AuthContext);
+  const userUid = context?.user?.uid;
   const openLink = () => {
     const url = managementUrlRef.current || balanceGptPrivacyLink;
     Linking.openURL(url).catch((err) =>
@@ -77,7 +78,7 @@ export default function Subscription() {
       presentPaywall();
       router.navigate("/");
       return () => {};
-    }, [])
+    }, [userUid])
   );
 
   return (
