@@ -9,6 +9,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { useFocusEffect } from "expo-router";
 import { getAuth } from "firebase/auth";
 import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
+import Purchases from "react-native-purchases";
 
 const presentPaywallIfNeeded = async () => {
   try {
@@ -45,22 +46,24 @@ const presentPaywall = async () => {
 export default function Subscription() {
   const context = useContext(AuthContext);
   const userUid = context?.user?.uid;
+  const managementUrlRef = useRef("");
   const openLink = () => {
     const url = managementUrlRef.current || balanceGptPrivacyLink;
+    console.log("cancel URl", url);
     Linking.openURL(url).catch((err) =>
       console.error("An error occurred", err)
     );
     router.navigate("/");
   };
-  const managementUrlRef = useRef("");
-  useFocusEffect(
-    // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
-    useCallback(() => {
+  const getLatestCustomerInfo = async () => {
+    try {
+      const latestPurchaseCustomerInfo = await Purchases.getCustomerInfo();
+      console.log("latestPurchaseCustomerInfo", latestPurchaseCustomerInfo);
       const auth = getAuth();
-      const managementUrl = context?.purchasesCustomerInfo?.managementUrl || "";
+      const managementUrl = latestPurchaseCustomerInfo?.managementURL || "";
       managementUrlRef.current = managementUrl;
       const activeSubscriptions =
-        context?.purchasesCustomerInfo?.activeSubscriptions || [];
+        latestPurchaseCustomerInfo?.activeSubscriptions || [];
       console.log({
         managementUrl,
         activeSubscriptions,
@@ -77,6 +80,14 @@ export default function Subscription() {
       }
       presentPaywall();
       router.navigate("/");
+    } catch (err) {
+      console.error("Error getting latest customer info", err);
+    }
+  };
+  useFocusEffect(
+    // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
+    useCallback(() => {
+      getLatestCustomerInfo();
       return () => {};
     }, [userUid])
   );
