@@ -82,9 +82,10 @@ export default function SignUp() {
       return;
     }
     try {
-      const result = await sendPasswordResetEmail(auth, email);
+      const trimmedEmail = email.trim();
+      const result = await sendPasswordResetEmail(auth, trimmedEmail);
       if (result === undefined) {
-        showErrorSnackbar("Success");
+        showErrorSnackbar("Pasword reset email sent");
       }
     } catch (err) {
       showErrorSnackbar((err as any)?.code || "");
