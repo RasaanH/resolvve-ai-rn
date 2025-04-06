@@ -4,7 +4,7 @@ import { AppColors } from "@/constants/Colors";
 import { Spaces } from "@/constants/Spacing";
 import { Button, Text } from "react-native-paper";
 import { router } from "expo-router";
-import { useCallback, useContext, useRef } from "react";
+import { useCallback, useContext, useRef, useState } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useFocusEffect } from "expo-router";
 import { getAuth } from "firebase/auth";
@@ -46,6 +46,7 @@ const presentPaywall = async () => {
 export default function Subscription() {
   const context = useContext(AuthContext);
   const userUid = context?.user?.uid;
+  const [loadingCustomerInfo, setLoadingCustomerInfo] = useState(false);
   const managementUrlRef = useRef("");
   const openLink = () => {
     const url = managementUrlRef.current || balanceGptPrivacyLink;
@@ -57,9 +58,15 @@ export default function Subscription() {
   };
   const getLatestCustomerInfo = async () => {
     try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user?.isAnonymous) {
+        router.navigate("/signup");
+        return;
+      }
+      setLoadingCustomerInfo(true);
       const latestPurchaseCustomerInfo = await Purchases.getCustomerInfo();
       console.log("latestPurchaseCustomerInfo", latestPurchaseCustomerInfo);
-      const auth = getAuth();
       const managementUrl = latestPurchaseCustomerInfo?.managementURL || "";
       managementUrlRef.current = managementUrl;
       const activeSubscriptions =
@@ -68,20 +75,17 @@ export default function Subscription() {
         managementUrl,
         activeSubscriptions,
       });
-      const user = auth.currentUser;
-      if (user?.isAnonymous) {
-        router.navigate("/signup");
-        return;
-      }
       if (activeSubscriptions.length > 0) {
         // later if we have more sub products we could check the specific entitlement
         console.log("has active plus subscription");
         return;
       }
+      setLoadingCustomerInfo(false);
       presentPaywall();
       router.navigate("/");
     } catch (err) {
       console.error("Error getting latest customer info", err);
+      setLoadingCustomerInfo(false);
     }
   };
   useFocusEffect(
@@ -91,6 +95,10 @@ export default function Subscription() {
       return () => {};
     }, [userUid])
   );
+
+  if (loadingCustomerInfo) {
+    return <View style={styles.greyBackground}></View>;
+  }
 
   return (
     <View style={styles.container}>
@@ -131,6 +139,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 1,
   },
+  greyBackground: {
+    backgroundColor: AppColors.DarkGrey,
+    flex: 1,
+  },
   image: {
     resizeMode: "cover",
     width: "100%",
@@ -153,6 +165,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: 700,
     marginBottom: Spaces.M,
+    marginTop: Spaces.Xs,
   },
   bottomPortion: {
     justifyContent: "space-between",
