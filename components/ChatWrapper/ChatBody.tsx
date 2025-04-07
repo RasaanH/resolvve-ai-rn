@@ -121,8 +121,6 @@ export const ChatBody = ({
           const {
             currentMessage: { text, system, user },
           } = props;
-
-          console.log({ text, user });
           if (user._id === 224687234) {
             // or if user message
             return (

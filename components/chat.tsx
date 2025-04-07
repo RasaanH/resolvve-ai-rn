@@ -2,7 +2,7 @@ import { TabsProvider, Tabs, TabScreen } from "react-native-paper-tabs";
 import { useEffect } from "react";
 import { Button, Portal, Modal, Text } from "react-native-paper";
 import { getAuth } from "firebase/auth";
-import { View, StyleSheet, Keyboard } from "react-native";
+import { View, StyleSheet, Keyboard, BackHandler } from "react-native";
 import { defaultMessage } from "@/constants/MockData";
 import { useState, useRef, useCallback } from "react";
 import { useFocusEffect, router } from "expo-router";
@@ -55,8 +55,20 @@ export const Chat = () => {
     useCallback(() => {
       setMessageList(defaultMessage);
       thread_id.current = "";
+      const backAction = () => {
+        // Disable back button
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+
       // Return function is invoked whenever the route gets out of focus.
-      return () => {};
+      return () => {
+        backHandler.remove();
+      };
     }, [])
   );
 

@@ -66,15 +66,10 @@ export default function Subscription() {
       }
       setLoadingCustomerInfo(true);
       const latestPurchaseCustomerInfo = await Purchases.getCustomerInfo();
-      console.log("latestPurchaseCustomerInfo", latestPurchaseCustomerInfo);
       const managementUrl = latestPurchaseCustomerInfo?.managementURL || "";
       managementUrlRef.current = managementUrl;
       const activeSubscriptions =
         latestPurchaseCustomerInfo?.activeSubscriptions || [];
-      console.log({
-        managementUrl,
-        activeSubscriptions,
-      });
       if (activeSubscriptions.length > 0) {
         // later if we have more sub products we could check the specific entitlement
         console.log("has active plus subscription");
