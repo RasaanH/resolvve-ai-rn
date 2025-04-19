@@ -2,7 +2,7 @@
   "expo": {
     "name": "Balance GPT",
     "slug": "resolvve-ai-rn",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/balancegpt_adaptive_icon.png",
     "scheme": "myapp",
