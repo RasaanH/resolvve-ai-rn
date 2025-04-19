@@ -73,6 +73,7 @@ export default function Subscription() {
       if (activeSubscriptions.length > 0) {
         // later if we have more sub products we could check the specific entitlement
         console.log("has active plus subscription");
+        setLoadingCustomerInfo(false);
         return;
       }
       setLoadingCustomerInfo(false);
