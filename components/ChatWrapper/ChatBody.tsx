@@ -30,21 +30,29 @@ const customtInputToolbar = (props: any) => {
     <InputToolbar
       {...props}
       containerStyle={{
-        backgroundColor: "white",
-        borderTopColor: "#E8E8E8",
-        borderTopWidth: 1,
+        backgroundColor: AppColors.OffDarkGrey,
+        borderWidth: 0,
+        borderTopWidth: 0,
         marginTop: 5,
         paddingHorizontal: Spaces.S,
-        paddingVertical: Spaces.Xs,
-        borderRadius: 8,
+        paddingVertical: Spaces.Xxs,
+        borderColor: AppColors.White,
+        borderRadius: 12,
         marginHorizontal: Spaces.M,
       }}
+      textInputStyle={{
+        borderTopWidth: 4,
+        borderBottomWidth: 4,
+        borderColor: "transparent",
+        color: AppColors.White,
+      }}
+      placeholderTextColor={AppColors.Grey}
     />
   );
 };
 
 const renderSend = (props: any, isTyping: boolean) => {
-  const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
+  const iconColor = isTyping ? AppColors.Grey : AppColors.OffWhite;
   return (
     <Send
       disabled={isTyping}
@@ -197,7 +205,7 @@ export const ChatBody = ({
                   paddingTop: 3,
                 },
                 right: {
-                  backgroundColor: AppColors.LightGrey,
+                  backgroundColor: AppColors.OffWhite,
                   padding: 5,
                   marginBottom: 1,
                 },

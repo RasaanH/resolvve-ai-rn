@@ -27,6 +27,8 @@ export const Colors = {
 
 export enum AppColors {
   DarkGrey = "#262222",
+  OffDarkGrey = "#383838",
+  OffWhite = "#f0f0f0",
   Grey = "grey",
   LightGrey = "#e9e8e8",
   DarkNavy = "rgb(43 47 75)",
