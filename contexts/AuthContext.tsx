@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import { Platform } from "react-native";
-import Purchases from "react-native-purchases";
+import Purchases, { CustomerInfo } from "react-native-purchases";
 import {
   public_google_play_key,
   public_apple_key,
@@ -11,12 +11,14 @@ import { User } from "firebase/auth";
 import { useDebouncedCallback } from "use-debounce";
 import app from "@/constants/firebaseConfig";
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext<Record<any, any>>({});
 
-const debouncedTimeout = 750;
+const debouncedTimeout = 1000;
 
 export const AuthProvider = (props: any) => {
   const [user, setUser] = useState<User>();
+  const [purchasesCustomerInfo, setPurchasesCustomerInfo] =
+    useState<CustomerInfo | null>(null);
   useEffect(() => {
     Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
     if (Platform.OS === "ios") {
@@ -30,11 +32,18 @@ export const AuthProvider = (props: any) => {
   const debouncedLogin = useDebouncedCallback(async (userUid: string) => {
     await Purchases.logIn(userUid);
     console.info("successfully logged in to purchases");
+    if (purchasesCustomerInfo === null) {
+      const customerInfo = await Purchases.getCustomerInfo();
+      setPurchasesCustomerInfo(customerInfo);
+    }
   }, debouncedTimeout);
 
   const debouncedLogout = useDebouncedCallback(async () => {
     await Purchases.logOut();
     console.info("successfully logged out of purchases");
+    if (purchasesCustomerInfo !== null) {
+      setPurchasesCustomerInfo(null);
+    }
   }, debouncedTimeout);
 
   const auth = getAuth(app);
@@ -49,9 +58,9 @@ export const AuthProvider = (props: any) => {
         }
         return;
       }
-      const customerInfo = await Purchases.getCustomerInfo();
-      const includesAnonymous = /anonymous/i;
-      if (includesAnonymous.test(customerInfo.originalAppUserId) === false) {
+      const appUserId = await Purchases.getAppUserID();
+      const includesAnonymous = /rcanonymousid/i;
+      if (includesAnonymous.test(appUserId) === false) {
         try {
           await debouncedLogout();
         } catch (err) {
@@ -63,7 +72,7 @@ export const AuthProvider = (props: any) => {
     }
   });
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, purchasesCustomerInfo }}>
       {props.children}
     </AuthContext.Provider>
   );
