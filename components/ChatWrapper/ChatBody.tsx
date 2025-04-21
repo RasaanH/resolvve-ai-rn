@@ -11,10 +11,11 @@ import {
 } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
 import Markdown from "react-native-markdown-display";
+import { Text } from "react-native-paper";
 
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TypingIndicator } from "../TypingIndicator";
+import Spinner from "react-native-spinkit";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -104,7 +105,31 @@ export const ChatBody = ({
     if (!isTyping) {
       return <View style={{ display: "none" }}></View>;
     }
-    return <TypingIndicator />;
+    // return <TypingIndicator />;
+    return (
+      <View
+        style={{
+          paddingLeft: Spaces.XL,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          // backgroundColor: "green",
+          gap: Spaces.M,
+        }}
+      >
+        <Spinner
+          type="Circle"
+          color={AppColors.Grey}
+          size={12}
+          isVisible={true}
+        />
+        <Text
+          style={{ color: AppColors.Grey, lineHeight: 22, fontStyle: "italic" }}
+        >
+          Thinking
+        </Text>
+      </View>
+    );
   };
 
   return (
