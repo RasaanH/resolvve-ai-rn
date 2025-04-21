@@ -105,7 +105,6 @@ export const ChatBody = ({
     if (!isTyping) {
       return <View style={{ display: "none" }}></View>;
     }
-    // return <TypingIndicator />;
     return (
       <View
         style={{
@@ -113,7 +112,6 @@ export const ChatBody = ({
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          // backgroundColor: "green",
           gap: Spaces.M,
         }}
       >
