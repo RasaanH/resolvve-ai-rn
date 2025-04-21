@@ -17,7 +17,7 @@ import {
   uiToOpenAiMessages,
   getAssistantFromTabIndex,
 } from "@/utility-functions/utils";
-import { ChatServiceResponse } from "@/constants/Types";
+import { ChatServiceResponseObj } from "@/constants/Types";
 
 export const Chat = () => {
   const [messageList, setMessageList] = useState(defaultMessage);
@@ -41,11 +41,11 @@ export const Chat = () => {
     gap: 26,
   };
 
-  const thread_id = useRef("");
+  const previous_response_id = useRef("");
   const tabRef = useRef(0);
 
   const functions = getFunctions();
-  const chatService = httpsCallable<any, ChatServiceResponse>(
+  const chatService = httpsCallable<any, ChatServiceResponseObj>(
     functions,
     "chatService"
   );
@@ -54,7 +54,7 @@ export const Chat = () => {
     // Callback should be wrapped in `React.useCallback` to avoid running the effect too often.
     useCallback(() => {
       setMessageList(defaultMessage);
-      thread_id.current = "";
+      previous_response_id.current = "";
       const backAction = () => {
         // Disable back button
         return true;
@@ -82,15 +82,13 @@ export const Chat = () => {
     Keyboard.dismiss();
     try {
       setIsTyping(true);
-      const responseMessages = await chatService({
+      const response = await chatService({
         assistantName,
         message,
-        thread_id: thread_id.current,
+        previous_response_id: previous_response_id.current,
       });
-      const {
-        data: { messages, threadId },
-      } = responseMessages;
-      if (messages.length === 0 && threadId === "") {
+      const resp_id = response.data.resp_id;
+      if (messages.length === 0 && resp_id === "") {
         showModal();
         return;
       }
@@ -98,10 +96,11 @@ export const Chat = () => {
         console.log("user changed tabs before response, ending early");
         return;
       }
-      thread_id.current = threadId;
-      console.log("data from response", JSON.stringify({ messages, threadId }));
-      const newMessages = openAiToUiMessages(messages);
-      setMessageList([...newMessages]);
+      previous_response_id.current = resp_id;
+      const responseData = response.data;
+      const latestMessage = openAiToUiMessages(responseData.output);
+      const combinedMessages = [...latestMessage, ...newMessages];
+      setMessageList([...combinedMessages]);
     } catch (err) {
       console.log("something went wrong", err);
     } finally {
@@ -110,7 +109,7 @@ export const Chat = () => {
   };
   const onTabChange = (index: number) => {
     setMessageList(defaultMessage);
-    thread_id.current = "";
+    previous_response_id.current = "";
     setTabIndex(index);
     tabRef.current = index;
     setIsTyping(false);

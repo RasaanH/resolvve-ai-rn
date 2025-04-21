@@ -1,3 +1,5 @@
+import { IMessage } from "react-native-gifted-chat";
+
 // types go here
 export interface ValidatePasswordArgs {
   password: string;
@@ -29,7 +31,16 @@ export interface OpenAiMessage {
   content: OpenAiMessageContent[] | OpenAiMessageContent;
 }
 
-export interface ChatServiceResponse {
-  messages: OpenAiMessage[];
-  threadId: string;
+export interface ChatServiceResponseOutput {
+  type: string;
+  status: string;
+  content: OpenAiMessageContent[];
+  role: string;
+  id: string;
+  resp_id: string;
+}
+
+export interface ChatServiceResponseObj {
+  resp_id: string;
+  output: ChatServiceResponseOutput[];
 }
