@@ -222,6 +222,7 @@ export const ChatBody = ({
                 left: {
                   backgroundColor: "transparent",
                   // backgroundColor: "purple",
+                  alignSelf: "stretch",
                   paddingLeft: 5,
                   paddingRight: 5,
                   paddingBottom: 5,
