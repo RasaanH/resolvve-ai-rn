@@ -181,7 +181,7 @@ export const ChatBody = ({
                 heading4: { color: "white" },
                 heading5: { color: "white" },
                 heading6: { color: "white" },
-                heading2: { color: "white" },
+                heading2: { color: "white", fontSize: 20 },
                 heading1: { color: "white" },
                 table: { color: "white" },
                 blockquote: {
