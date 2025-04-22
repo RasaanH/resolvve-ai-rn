@@ -11,10 +11,11 @@ import {
 } from "react-native-gifted-chat";
 import { ChatModes, EmptyChat } from "./EmptyChat";
 import Markdown from "react-native-markdown-display";
+import { Text } from "react-native-paper";
 
 import { Spaces } from "@/constants/Spacing";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TypingIndicator } from "../TypingIndicator";
+import Spinner from "react-native-spinkit";
 
 export type SendFn = (messages: IMessage[]) => Promise<void>;
 
@@ -30,21 +31,29 @@ const customtInputToolbar = (props: any) => {
     <InputToolbar
       {...props}
       containerStyle={{
-        backgroundColor: "white",
-        borderTopColor: "#E8E8E8",
-        borderTopWidth: 1,
+        backgroundColor: AppColors.OffDarkGrey,
+        borderWidth: 0,
+        borderTopWidth: 0,
         marginTop: 5,
         paddingHorizontal: Spaces.S,
-        paddingVertical: Spaces.Xs,
-        borderRadius: 8,
+        paddingVertical: Spaces.Xxs,
+        borderColor: AppColors.White,
+        borderRadius: 12,
         marginHorizontal: Spaces.M,
       }}
+      textInputStyle={{
+        borderTopWidth: 4,
+        borderBottomWidth: 4,
+        borderColor: "transparent",
+        color: AppColors.White,
+      }}
+      placeholderTextColor={AppColors.Grey}
     />
   );
 };
 
 const renderSend = (props: any, isTyping: boolean) => {
-  const iconColor = isTyping ? AppColors.Grey : AppColors.Black;
+  const iconColor = isTyping ? AppColors.Grey : AppColors.OffWhite;
   return (
     <Send
       disabled={isTyping}
@@ -96,7 +105,29 @@ export const ChatBody = ({
     if (!isTyping) {
       return <View style={{ display: "none" }}></View>;
     }
-    return <TypingIndicator />;
+    return (
+      <View
+        style={{
+          paddingLeft: Spaces.XL,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: Spaces.M,
+        }}
+      >
+        <Spinner
+          type="Circle"
+          color={AppColors.Grey}
+          size={12}
+          isVisible={true}
+        />
+        <Text
+          style={{ color: AppColors.Grey, lineHeight: 22, fontStyle: "italic" }}
+        >
+          Thinking
+        </Text>
+      </View>
+    );
   };
 
   return (
@@ -150,7 +181,7 @@ export const ChatBody = ({
                 heading4: { color: "white" },
                 heading5: { color: "white" },
                 heading6: { color: "white" },
-                heading2: { color: "white" },
+                heading2: { color: "white", fontSize: 20 },
                 heading1: { color: "white" },
                 table: { color: "white" },
                 blockquote: {
@@ -191,13 +222,14 @@ export const ChatBody = ({
                 left: {
                   backgroundColor: "transparent",
                   // backgroundColor: "purple",
+                  alignSelf: "stretch",
                   paddingLeft: 5,
                   paddingRight: 5,
                   paddingBottom: 5,
                   paddingTop: 3,
                 },
                 right: {
-                  backgroundColor: AppColors.LightGrey,
+                  backgroundColor: AppColors.OffWhite,
                   padding: 5,
                   marginBottom: 1,
                 },

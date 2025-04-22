@@ -8,6 +8,7 @@ import {
   OpenAiMessage,
   OpenAiMessageContent,
   OpenAiMessageRole,
+  ChatServiceResponseOutput,
 } from "@/constants/Types";
 
 import { ChatModes } from "@/components/ChatWrapper/EmptyChat";
@@ -71,17 +72,26 @@ export const uiToOpenAiMessages = (messages: IMessage[]): OpenAiMessage[] => {
   return newMessages;
 };
 
-export const openAiToUiMessages = (messages: OpenAiMessage[]): IMessage[] => {
-  const newMessages = messages.map((value) => {
-    const messageUid = uuidv4();
-    const user = value.role === "assistant" ? systemUser : regularUser;
-    const text = Array.isArray(value.content)
-      ? (value.content[0].text as any)?.value
-      : value.content.text;
-    const createdAt = new Date();
-    return { _id: messageUid, text, createdAt, user };
-  });
-  return newMessages;
+export const openAiToUiMessages = (
+  output: ChatServiceResponseOutput[]
+): IMessage[] => {
+  const correctData = output.find((item) => item?.content?.length > 0) || {
+    content: [],
+    id: "",
+  };
+  const { content, id } = correctData;
+  const newMessageText =
+    typeof content?.[0]?.text === "string"
+      ? content[0].text
+      : content?.[0].text.value;
+  return [
+    {
+      _id: id,
+      text: newMessageText,
+      createdAt: new Date(),
+      user: systemUser,
+    },
+  ];
 };
 
 export const getAssistantFromTabIndex = (tabIndex: number): ChatModes => {
