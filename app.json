@@ -14,14 +14,17 @@
       "backgroundColor": "#262222"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rasaanorg.balancegpt"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/balancegpt_adaptive_icon.png",
         "backgroundColor": "#262222"
       },
-      "permissions": ["com.android.vending.BILLING"],
+      "permissions": [
+        "com.android.vending.BILLING"
+      ],
       "package": "com.rasaanorg.balancegpt"
     },
     "web": {
