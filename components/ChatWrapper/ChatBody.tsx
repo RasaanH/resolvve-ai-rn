@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Keyboard, View, KeyboardAvoidingView, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppColors } from "@/constants/Colors";
 import {
   GiftedChat,
@@ -27,7 +28,7 @@ interface ChatBodyProps {
 }
 
 const customtInputToolbar = (props: any) => {
-  const iosContainerStyle = {marginBottom: 30, paddingVertical: Spaces.Xs}
+  const iosContainerStyle = {paddingVertical: Spaces.Xs}
   const iosTextInputStyle = {padding: 0}
   const containerStyle = {
     backgroundColor: AppColors.OffDarkGrey,
@@ -84,6 +85,7 @@ export const ChatBody = ({
   isTyping,
 }: ChatBodyProps) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const platformShowListener = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
@@ -142,13 +144,13 @@ export const ChatBody = ({
       </View>
     );
   };
-
+  const keyboardAvoidViewStyle = Platform.OS === "ios" ? { flex: 1, marginBottom: insets.bottom } : { flex: 1 };
    return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={keyboardAvoidViewStyle}
       behavior={Platform.OS === "ios" ? keyboardHeight > 0 ? "height" : 'padding' : "height"}
       keyboardVerticalOffset={
-        Platform.OS === "ios" ? keyboardHeight/2 - 40: keyboardHeight / 2 + 10
+        Platform.OS === "ios" ? keyboardHeight/2 - 10 : keyboardHeight / 2 + 10
       }
     >
       <GiftedChat
