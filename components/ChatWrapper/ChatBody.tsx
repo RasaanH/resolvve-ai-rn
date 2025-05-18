@@ -87,6 +87,12 @@ export const ChatBody = ({
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
+      /**
+       * Note, if willshow causes problems on anndroid, use didshow for android
+       * and willshow for ios. Also, consider if a fixed number works bettter than
+       * keyboardHeight based solutions since I think it's about size from top, not keyboard
+       * but I could be wrong.
+       */
       "keyboardWillShow",
       (event) => {
         setKeyboardHeight(event.endCoordinates.height);
