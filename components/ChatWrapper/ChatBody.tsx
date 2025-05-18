@@ -27,26 +27,31 @@ interface ChatBodyProps {
 }
 
 const customtInputToolbar = (props: any) => {
+  const iosContainerStyle = {marginBottom: 30}
+  const iosTextInputStyle = {padding: 0}
+  const containerStyle = {
+    backgroundColor: AppColors.OffDarkGrey,
+    borderWidth: 0,
+    borderTopWidth: 0,
+    marginTop: 5,
+    paddingHorizontal: Spaces.S,
+    paddingVertical: Spaces.Xxs,
+    borderColor: AppColors.White,
+    borderRadius: 12,
+    marginHorizontal: Spaces.M,}
+  const textInputStyle = {
+    borderTopWidth: 4,
+    borderBottomWidth: 4,
+    borderColor: "transparent",
+    color: AppColors.White,
+  };
+  const platformContainerStyle = Platform.OS === 'ios' ? {...containerStyle, ...iosContainerStyle} : containerStyle;
+  const platformTextInputStyle = Platform.OS === 'ios' ? {...textInputStyle, ...iosTextInputStyle} : textInputStyle;
   return (
     <InputToolbar
       {...props}
-      containerStyle={{
-        backgroundColor: AppColors.OffDarkGrey,
-        borderWidth: 0,
-        borderTopWidth: 0,
-        marginTop: 5,
-        paddingHorizontal: Spaces.S,
-        paddingVertical: Spaces.Xxs,
-        borderColor: AppColors.White,
-        borderRadius: 12,
-        marginHorizontal: Spaces.M,
-      }}
-      textInputStyle={{
-        borderTopWidth: 4,
-        borderBottomWidth: 4,
-        borderColor: "transparent",
-        color: AppColors.White,
-      }}
+      containerStyle={platformContainerStyle}
+      textInputStyle={platformTextInputStyle}
       placeholderTextColor={AppColors.Grey}
     />
   );
@@ -130,12 +135,12 @@ export const ChatBody = ({
     );
   };
 
-  return (
+   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? keyboardHeight > 0 ? "height" : 'padding' : "height"}
       keyboardVerticalOffset={
-        Platform.OS === "ios" ? 0 : keyboardHeight / 2 + 10
+        Platform.OS === "ios" ? keyboardHeight/2 - 40: keyboardHeight / 2 + 10
       }
     >
       <GiftedChat
