@@ -87,14 +87,14 @@ export const ChatBody = ({
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
+      "keyboardWillShow",
       (event) => {
         setKeyboardHeight(event.endCoordinates.height);
       }
     );
 
     const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
+      "keyboardWillHide",
       () => {
         setKeyboardHeight(0);
       }
