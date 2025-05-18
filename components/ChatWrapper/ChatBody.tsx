@@ -27,7 +27,7 @@ interface ChatBodyProps {
 }
 
 const customtInputToolbar = (props: any) => {
-  const iosContainerStyle = {marginBottom: 30}
+  const iosContainerStyle = {marginBottom: 30, paddingVertical: Spaces.Xs}
   const iosTextInputStyle = {padding: 0}
   const containerStyle = {
     backgroundColor: AppColors.OffDarkGrey,
@@ -86,6 +86,8 @@ export const ChatBody = ({
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
+    const platformShowListener = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const platformHideListener = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
     const keyboardDidShowListener = Keyboard.addListener(
       /**
        * Note, if willshow causes problems on anndroid, use didshow for android
@@ -93,14 +95,14 @@ export const ChatBody = ({
        * keyboardHeight based solutions since I think it's about size from top, not keyboard
        * but I could be wrong.
        */
-      "keyboardWillShow",
+      platformShowListener,
       (event) => {
         setKeyboardHeight(event.endCoordinates.height);
       }
     );
 
     const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardWillHide",
+      platformHideListener,
       () => {
         setKeyboardHeight(0);
       }
