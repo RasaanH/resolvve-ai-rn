@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppColors } from "@/constants/Colors";
 import {
   GiftedChat,
+  Composer,
   Bubble,
   IMessage,
   InputToolbar,
@@ -29,7 +30,7 @@ interface ChatBodyProps {
 
 const customtInputToolbar = (props: any) => {
   const iosContainerStyle = {paddingVertical: Spaces.Xs}
-  const iosTextInputStyle = {padding: 0}
+  const iosTextInputStyle = {padding: 0, marginBottom: 8}
   const containerStyle = {
     backgroundColor: AppColors.OffDarkGrey,
     borderWidth: 0,
@@ -44,6 +45,7 @@ const customtInputToolbar = (props: any) => {
     borderTopWidth: 4,
     borderBottomWidth: 4,
     borderColor: "transparent",
+    marginRight: Spaces.Xs,
     color: AppColors.White,
   };
   const platformContainerStyle = Platform.OS === 'ios' ? {...containerStyle, ...iosContainerStyle} : containerStyle;
@@ -54,6 +56,12 @@ const customtInputToolbar = (props: any) => {
       containerStyle={platformContainerStyle}
       textInputStyle={platformTextInputStyle}
       placeholderTextColor={AppColors.Grey}
+      renderComposer={Platform.OS === 'ios' ? (composerProps) => (
+        <Composer
+          {...composerProps}
+          composerHeight='auto'
+        />
+      ) : undefined}
     />
   );
 };
@@ -211,6 +219,10 @@ export const ChatBody = ({
             );
           }}
           renderInputToolbar={(props) => customtInputToolbar(props)}
+          // renderComposer = {(props) => (
+          //   <Composer {...props} composerHeight='auto' /> 
+          //   )
+          // }
           renderSend={(props) => renderSend(props, isTyping)}
           inverted={messageList.length !== 0}
           renderAvatarOnTop={true}
