@@ -159,7 +159,7 @@ export const ChatBody = ({
         style={keyboardAvoidViewStyle}
         behavior={Platform.OS === "ios" ? keyboardHeight > 0 ? "height" : 'padding' : "height"}
         keyboardVerticalOffset={
-          Platform.OS === "ios" ? keyboardHeight/2 - 10 : keyboardHeight / 2 + 10
+          Platform.OS === "ios" ? keyboardHeight/2 : keyboardHeight / 2 + 10
         }
       >
         <GiftedChat
@@ -219,10 +219,6 @@ export const ChatBody = ({
             );
           }}
           renderInputToolbar={(props) => customtInputToolbar(props)}
-          // renderComposer = {(props) => (
-          //   <Composer {...props} composerHeight='auto' /> 
-          //   )
-          // }
           renderSend={(props) => renderSend(props, isTyping)}
           inverted={messageList.length !== 0}
           renderAvatarOnTop={true}

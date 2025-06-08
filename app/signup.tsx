@@ -1,4 +1,4 @@
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useState, useCallback } from "react";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import { AppColors } from "@/constants/Colors";
@@ -195,6 +195,7 @@ export default function SignUp() {
     ? "Failed to sign up"
     : "Failed to login";
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
@@ -306,6 +307,7 @@ export default function SignUp() {
         </View>
       </View>
     </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
