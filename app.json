@@ -4,7 +4,7 @@
     "slug": "resolvve-ai-rn",
     "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/images/balancegpt_adaptive_icon.png",
+    "icon": "./assets/images/apple_icon.png",
     "scheme": "myapp",
     "newArchEnabled": true,
     "userInterfaceStyle": "automatic",

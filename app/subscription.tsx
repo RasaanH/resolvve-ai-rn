@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: Spaces.S,
     padding: Spaces.S,
+    marginBottom: Spaces.XL,
     zIndex: 500,
   },
   buttonContent: {
