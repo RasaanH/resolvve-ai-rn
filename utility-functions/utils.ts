@@ -14,8 +14,6 @@ import {
 import { ChatModes } from "@/components/ChatWrapper/EmptyChat";
 
 export const mockChatCall = (messages: IMessage[]): Promise<IMessage[]> => {
-  const fakeId = uuidv4();
-  console.log({ fakeId });
   const fakeReturnMessage: IMessage = {
     _id: uuidv4(),
     text: "Sample gpt response",
