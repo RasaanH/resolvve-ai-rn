@@ -18,7 +18,6 @@ const presentPaywallIfNeeded = async () => {
       await RevenueCatUI.presentPaywallIfNeeded({
         requiredEntitlementIdentifier: "pro",
       });
-    console.log(paywallResult);
     return paywallResult;
   } catch (err) {
     console.log("error presenting paywall", err);
@@ -50,7 +49,6 @@ export default function Subscription() {
   const managementUrlRef = useRef("");
   const openLink = () => {
     const url = managementUrlRef.current || balanceGptPrivacyLink;
-    console.log("cancel URl", url);
     Linking.openURL(url).catch((err) =>
       console.error("An error occurred", err)
     );
@@ -72,7 +70,6 @@ export default function Subscription() {
         latestPurchaseCustomerInfo?.activeSubscriptions || [];
       if (activeSubscriptions.length > 0) {
         // later if we have more sub products we could check the specific entitlement
-        console.log("has active plus subscription");
         setLoadingCustomerInfo(false);
         return;
       }
