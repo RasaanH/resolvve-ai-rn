@@ -2,7 +2,7 @@
   "expo": {
     "name": "Balance GPT",
     "slug": "resolvve-ai-rn",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/images/apple_icon.png",
     "scheme": "myapp",
@@ -22,9 +22,7 @@
         "foregroundImage": "./assets/images/balancegpt_adaptive_icon.png",
         "backgroundColor": "#262222"
       },
-      "permissions": [
-        "com.android.vending.BILLING"
-      ],
+      "permissions": ["com.android.vending.BILLING"],
       "package": "com.rasaanorg.balancegpt"
     },
     "web": {
